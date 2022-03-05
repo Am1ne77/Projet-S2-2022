@@ -49,6 +49,15 @@ namespace Game
 
         private int ManPhase = 0;
         
+        
+        [SerializeField] 
+        private AudioSource YouLost_Sound;
+        
+        [SerializeField] 
+        private AudioSource YouWon_Sound;
+        
+        
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -73,6 +82,8 @@ namespace Game
                     revealed[i] = word[i];
                 }
                 UpdateWorldIndicator();
+                
+                YouLost_Sound.Play();
             }
 
             if (completed)
@@ -86,6 +97,8 @@ namespace Game
                     Bonhomme.transform.Find("Man" + i).gameObject.SetActive(false);
                 }
                 Bonhomme.transform.Find("Man8").gameObject.SetActive(true);
+                
+                YouWon_Sound.Play();
             }
         }
         // Update is called once per frame
