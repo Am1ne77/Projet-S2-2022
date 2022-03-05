@@ -80,6 +80,12 @@ namespace Game
                 this.gameObject.SetActive(false);
                 YouWon.SetActive(true);
                 Buttons.SetActive(true);
+                
+                for (int i = 1; i < 9; i++)
+                {
+                    Bonhomme.transform.Find("Man" + i).gameObject.SetActive(false);
+                }
+                Bonhomme.transform.Find("Man8").gameObject.SetActive(true);
             }
         }
         // Update is called once per frame
@@ -233,7 +239,7 @@ namespace Game
 
         public void OnRestartClick()
         {
-            for (int i = 1; i < 8; i++)
+            for (int i = 1; i < 9; i++)
             {
                 Bonhomme.transform.Find("Man" + i).gameObject.SetActive(false);
             }
