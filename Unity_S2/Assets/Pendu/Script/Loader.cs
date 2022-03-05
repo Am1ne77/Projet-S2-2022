@@ -13,7 +13,7 @@ using System.Reflection;
          * The path should be where the work_bank.txt is located in your directory
          * The function can be called with no arguments as its predefined value is at the root of the TP1 folder
          */
-        public static string GetWord(string path = "/Users/user/Desktop/Projet-S2/Unity_S2/Assets/Pendu/Script/word_bank.txt")
+        public static string GetWord(string path = "C:/Users/attil/OneDrive/Documents/Cours/SUP/S2/projet/Projet-S2-2022/Unity_S2/Assets/Pendu/Script/word_bank.txt")
         {
             if (!File.Exists(path))
                 throw new ArgumentException("Loader: couldn't load word bank at " + path);
