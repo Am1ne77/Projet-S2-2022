@@ -65,7 +65,7 @@ namespace Matchmaking
         private bool switchingscene;
         private void Update()
         {
-            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2 && !switchingscene)
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= 1 && !switchingscene)
             {
                 switchingscene = true;
                 PhotonNetwork.LoadLevel(2);
