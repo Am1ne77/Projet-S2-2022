@@ -43,7 +43,12 @@ namespace Game
         
         [SerializeField] 
         private GameObject Buttons;
+        
+        [SerializeField] 
+        private GameObject Bonhomme;
 
+        private int ManPhase = 0;
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -138,6 +143,12 @@ namespace Game
                 letterIndicator.text += " ";
                 letterIndicator.text += c;
                 nb_errors++;
+                ManPhase++;
+                Bonhomme.transform.Find("Man" + ManPhase).gameObject.SetActive(true);
+                if (ManPhase > 1)
+                {
+                    Bonhomme.transform.Find("Man" + (ManPhase - 1)).gameObject.SetActive(false);
+                }
             }
             return ret;
         }
@@ -210,6 +221,7 @@ namespace Game
         public void reset()
         {
             nb_errors = 0;
+            ManPhase = 0;
             completed = false;
             YouLost.SetActive(false);
             YouWon.SetActive(false);
@@ -221,6 +233,10 @@ namespace Game
 
         public void OnRestartClick()
         {
+            for (int i = 1; i < 8; i++)
+            {
+                Bonhomme.transform.Find("Man" + i).gameObject.SetActive(false);
+            }
             reset();
         }
 
