@@ -63,11 +63,11 @@ namespace Game
         {
             //hangman = GameObject.FindGameObjectsWithTag("Player").GetComponent<HangmanController>();
             reset();
+            Debug.Log(word);
         }
 
         public void Update()
         {
-            Debug.Log(word);
             
             if(Letter_input.text != null)
                  _inputOfPlayer = Letter_input.text;
@@ -256,6 +256,7 @@ namespace Game
             {
                 Bonhomme.transform.Find("Man" + i).gameObject.SetActive(false);
             }
+            Debug.Log(word);
             reset();
         }
 

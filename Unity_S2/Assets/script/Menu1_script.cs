@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class Menu1_script : MonoBehaviour
 {
+    [SerializeField] 
+    private AudioSource Macron;
+    
     private void Update()
     {
         if (PhotonNetwork.IsConnected)
@@ -23,5 +26,10 @@ public class Menu1_script : MonoBehaviour
     public void ChangeMenu()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void Credits()
+    {
+        Macron.Play();
     }
 }
