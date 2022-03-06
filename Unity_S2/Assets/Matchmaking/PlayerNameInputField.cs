@@ -68,6 +68,11 @@ namespace Matchmaking
             if (string.IsNullOrEmpty(value))
             {
                 Debug.LogError("Player Name is null or empty");
+                
+                PhotonNetwork.NickName = null;
+
+
+                PlayerPrefs.SetString(playerNamePrefKey,value);
                 return;
             }
             PhotonNetwork.NickName = value;

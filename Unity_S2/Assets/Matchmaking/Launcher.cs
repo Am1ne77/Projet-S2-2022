@@ -85,6 +85,10 @@ namespace Matchmaking
         /// </summary>
         public void Connect()
         {
+            if (PhotonNetwork.LocalPlayer.NickName == null || PhotonNetwork.LocalPlayer.NickName.Length == 0)
+            {
+                return;
+            }
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
             {
