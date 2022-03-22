@@ -13,7 +13,7 @@ using System.Reflection;
          * The path should be where the work_bank.txt is located in your directory
          * The function can be called with no arguments as its predefined value is at the root of the TP1 folder
          */
-        public static string GetWord(string path = "./Assets/Pendu/Script/word_bank.txt")
+        /*public static string GetWord(string path = "./Assets/Pendu/Script/word_bank.txt")
         {
             if (!File.Exists(path))
                 throw new ArgumentException("Loader: couldn't load word bank at " + path);
@@ -28,7 +28,7 @@ using System.Reflection;
                 Console.WriteLine(e);
                 throw;
             }
-        }
+        }*/
 
         /*
          * This function returns a char array initialized to '_' at size of the WordToGuess

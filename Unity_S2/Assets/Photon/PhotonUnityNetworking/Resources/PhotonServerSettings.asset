@@ -40,6 +40,15 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_ChangeReadyState
+  - OnValidateCLick
+  - OnValidateClick
+  - check
+  - OnExitCLick
+  - OnRestartClick
+  - Update
+  - updateIndicatorScore
+  - UpdateWorldIndicator
+  - OnButtonClick
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

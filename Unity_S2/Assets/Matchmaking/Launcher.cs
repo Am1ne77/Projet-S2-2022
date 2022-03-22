@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -24,6 +22,9 @@ namespace Matchmaking
         [Tooltip("The UI Label to inform the user that the connection is in progress")]
         [SerializeField]
         private GameObject progressLabel;
+
+        [SerializeField] 
+        private GameObject successful;
         
         #endregion
 
@@ -65,9 +66,13 @@ namespace Matchmaking
         private bool switchingscene;
         private void Update()
         {
-            if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= 1 && !switchingscene)
+            if (PhotonNetwork.IsMasterClient && !switchingscene && (PhotonNetwork.CurrentRoom.PlayerCount >= 2
+                                                                    || Input.GetKey(KeyCode.Space)))
             {
+                Debug.Log("switching scenes");
                 switchingscene = true;
+                //PhotonNetwork.CurrentRoom.IsOpen = false;
+                //PhotonNetwork.CurrentRoom.IsVisible = false;
                 PhotonNetwork.LoadLevel(2);
             }
         }
@@ -116,6 +121,7 @@ namespace Matchmaking
     public override void OnConnectedToMaster()
     {
         Debug.Log("Launcher: OnConnectedToMaster() was called by PUN");
+        successful.SetActive(true);
         PhotonNetwork.JoinRandomRoom();
     }
 
@@ -124,6 +130,7 @@ namespace Matchmaking
     {
         Debug.LogWarningFormat("Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
         progressLabel.SetActive(false);
+        successful.SetActive(false);
         controlPanel.SetActive(true);
     }
 
