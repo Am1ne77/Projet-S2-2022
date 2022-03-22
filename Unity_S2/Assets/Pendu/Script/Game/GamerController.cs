@@ -126,7 +126,7 @@ namespace Game
         }
 
 
-        public void OnButtonClick()
+        /*public void OnButtonClick()
         {
             if (revealed.Length == 0)
             {
@@ -139,7 +139,7 @@ namespace Game
 
             OnValidateClick();
 
-            /*if (photonView.IsMine)
+            if (photonView.IsMine)
             {
                 OnValidateClick();
             }
@@ -148,11 +148,11 @@ namespace Game
                 photonView.RPC("OnValidateClick",RpcTarget.MasterClient);
                 Debug.Log(letterIndicator.text);
                 Debug.Log(wordIndicator.text);
-            }*/
-        }
+            }
+        }*/
         
         [PunRPC]
-        void OnValidateClick()
+        public void OnValidateClick()
         {
             if (completed)
             {
