@@ -18,7 +18,7 @@ public class Pendu_main : MonoBehaviour
         if(Letter_input.text != null)
             _inputOfPlayer = Letter_input.text;
     }
-
+    
     private static readonly string WordToGuess = Loader.GetWord();
     
     public static char GetInput()
@@ -38,6 +38,7 @@ public class Pendu_main : MonoBehaviour
         {
             Debug.Log("Invalid Argument");
         }
+        
         
         return character;
 

@@ -2,12 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-namespace Matchmaking
+namespace Matchmaking 
 {
     public class Launcher : MonoBehaviourPunCallbacks
     {
@@ -24,7 +22,7 @@ namespace Matchmaking
         [Tooltip("The UI Label to inform the user that the connection is in progress")]
         [SerializeField]
         private GameObject progressLabel;
-        
+
         #endregion
 
 
@@ -56,7 +54,6 @@ namespace Matchmaking
             // #Critical
             // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
             PhotonNetwork.AutomaticallySyncScene = true;
-            
             progressLabel.SetActive(false);
             controlPanel.SetActive(true);
         }

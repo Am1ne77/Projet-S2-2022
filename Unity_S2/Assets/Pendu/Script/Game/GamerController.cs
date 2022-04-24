@@ -13,10 +13,11 @@ using UnityEngine.SceneManagement;
 using Util;
 using WebSocketSharp;
 using Random = System.Random;
+using Data;
 
 namespace Game
 {
-    public class GamerController : MonoBehaviour
+    public class  GamerController : MonoBehaviour
     {
         public Text wordIndicator;
 
@@ -30,7 +31,6 @@ namespace Game
        // private HangmanController hangman;
         private string word;
         private char[] revealed;
-        private int score;
         private bool completed;
 
         private int nb_errors;
@@ -45,6 +45,9 @@ namespace Game
         private GameObject Buttons;
         
         [SerializeField] 
+        private GameObject btn_exit;
+        
+        [SerializeField] 
         private GameObject Bonhomme;
 
         private int ManPhase = 0;
@@ -55,12 +58,19 @@ namespace Game
         
         [SerializeField] 
         private AudioSource YouWon_Sound;
+
+        public FirebaseManager Firebase;
+        
+        private int score;
         
         
         
         // Start is called before the first frame update
         void Start()
         {
+            Firebase = FirebaseManager.Instance;
+            
+            score = Firebase.xpField;
             //hangman = GameObject.FindGameObjectsWithTag("Player").GetComponent<HangmanController>();
             reset();
             Debug.Log(word);
@@ -69,11 +79,13 @@ namespace Game
         public void Update()
         {
             
+            
             if(Letter_input.text != null)
                  _inputOfPlayer = Letter_input.text;
 
             if (nb_errors == 7)
             {
+                score -= word.Length * 100;
                 this.gameObject.SetActive(false);
                 YouLost.SetActive(true);
                 Buttons.SetActive(true);
@@ -127,10 +139,12 @@ namespace Game
         private bool check(char? c)
         {
             bool ret = false;
-            int complete = 0;
-            int score = 0;
+            int complete = 0; 
+            score = Firebase.xpField;
+                
+            Debug.LogFormat(Firebase.xpField.ToString());
             for (int i = 0; i < revealed.Length; i++)
-            { 
+            {
                 if (c == word[i])
                 {
                     ret = true;
@@ -140,6 +154,7 @@ namespace Game
                         score += 100;
                     }
                 }
+                else score -= 100;
                 if (revealed[i] != 0)
                     complete++;
                
@@ -147,11 +162,10 @@ namespace Game
 
             if (score != 0)
             {
-                this.score += score;
                 if (complete == revealed.Length)
                 {
                     this.completed = true;
-                    this.score += revealed.Length * 100;
+                    this.score += revealed.Length +100*complete;
                 }
                 UpdateWorldIndicator();
                 updateIndicatorScore();
@@ -262,8 +276,14 @@ namespace Game
 
         public void OnExitCLick()
         {
+            Firebase.xpField = score;
+            Firebase.SaveDataButton();
+            // DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+           // WriteNewScore(DBreference.Child("users").Child(User.UserId).GetValueAsync(), score);
             PhotonNetwork.LoadLevel(0);
             PhotonNetwork.LeaveRoom();
+            
         }
+
     }
 }

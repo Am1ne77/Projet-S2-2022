@@ -9,14 +9,19 @@ using Photon.Realtime;
 using System.Collections;
 
 
+using Data;
+
 namespace Matchmaking
 {
     /// <summary>
     /// Player name input field. Let the user input his name, will appear above the player in the game.
     /// </summary>
     [RequireComponent(typeof(InputField))]
-    public class PlayerNameInputField : MonoBehaviour
+    public class PlayerNameInputField : MonoBehaviour 
     {
+        public FirebaseManager Firebase;
+       
+        
         #region Private Constants
 
 
@@ -28,14 +33,13 @@ namespace Matchmaking
 
 
         #region MonoBehaviour CallBacks
-
-
         /// <summary>
         /// MonoBehaviour method called on GameObject by Unity during initialization phase.
         /// </summary>
         void Start () {
 
-
+            Firebase = FirebaseManager.Instance;
+            
             string defaultName = string.Empty;
             InputField _inputField = this.GetComponent<InputField>();
             if (_inputField!=null)
@@ -44,10 +48,12 @@ namespace Matchmaking
                 {
                     defaultName = PlayerPrefs.GetString(playerNamePrefKey);
                     _inputField.text = defaultName;
+                    //Firebase.usernameField =defaultName;
+
                 }
+                Firebase.usernameField = _inputField.text.ToString(); //demander à Amine
+                
             }
-
-
             PhotonNetwork.NickName =  defaultName;
         }
 
@@ -76,7 +82,7 @@ namespace Matchmaking
                 return;
             }
             PhotonNetwork.NickName = value;
-
+            Firebase.usernameField = value;
 
             PlayerPrefs.SetString(playerNamePrefKey,value);
         }
