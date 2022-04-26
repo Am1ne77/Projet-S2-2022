@@ -1595,6 +1595,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: plateau
       objectReference: {fileID: 0}
+    - target: {fileID: 3849762623622064168, guid: 1aa3006c0a5d544d2b9f9357660444a8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313301124847075975, guid: 1aa3006c0a5d544d2b9f9357660444a8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1aa3006c0a5d544d2b9f9357660444a8, type: 3}
 --- !u!1 &1901888610

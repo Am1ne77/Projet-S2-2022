@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Photon.Pun;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,21 +15,13 @@ public class Thegame : MonoBehaviour
 
     const char Empty = '.';
     const char Player1Piece = '1';
-    const char Player2Piece = '1';
+    const char Player2Piece = '2';
 
-    public Button Button1;
-    public Button Button2;
-    public Button Button3;
-    public Button Button4;
-    public Button Button5;
-    public Button Button6;
-    public Button Button7;
-    
 
-    int Player1 = 1;
-    int Player2 = 0;
+    public GameObject Pions1;
+    public GameObject Pions2;
+    public GameObject Plateau;
 
-    
     //Initialise the board
     private char[][] CreateBoard()
     {
@@ -435,8 +428,64 @@ public class Thegame : MonoBehaviour
     #endregion
 
     //setup the game
-    public void setup()
+    public char[][] setup()
     {
         char[][] board = CreateBoard();
+        return board;
     }
+
+    public void Start()
+    {
+        Board = setup();
+        if (PhotonNetwork.IsConnected)
+        {
+            aienabled = PhotonNetwork.CurrentRoom.PlayerCount != 2;
+        }
+        else
+        {
+            aienabled = true;
+            isplayerturn = true;
+        }
+    }
+
+    public char[][] Board;
+    private bool aienabled;
+    private bool isplayerturn;
+    public void Update()
+    {
+        if (Win(Board,Player1Piece) || Win(Board,Player2Piece))
+        {
+            Debug.Log("Game Finished");
+        }
+
+        if (aienabled)
+        {
+            if (!isplayerturn)
+            {
+                return;
+            }
+        }
+    }
+
+    #region DropCols
+
+    public void DropCol0()
+    {
+        if (!IsValidLocation(Board,0))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 0);
+        DropPiece(Board,row,0,Player1Piece);
+        var spawn = new Vector3(265, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions1,spawn,transform.rotation);
+    }
+
+    #endregion
 }
