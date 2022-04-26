@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Threading.Tasks;
 using Photon.Pun;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -50,9 +52,9 @@ public class Thegame : MonoBehaviour
     
     
     //check if location is valid
-    private bool IsValidLocation(char[][] b, int col)
+    private bool IsValidLocation(char[][] b, int? col)
     {
-        return b[0][col] == '.';
+        return b[0][(int) col] == '.';
     }
     
     
@@ -462,15 +464,57 @@ public class Thegame : MonoBehaviour
         {
             if (!isplayerturn)
             {
-                return;
+                var res = Minimax(Board, 5, Int32.MinValue, Int32.MaxValue, true);
+                if (IsValidLocation(Board,res.Item1))
+                {
+                    var past = DateTime.Now.Millisecond;
+                    
+                    
+                    int row = GetNextOpenRow(Board, (int)res.Item1);
+                    switch (row)
+                    {
+                        case 0:
+                            DropCol0P2();
+                            break;
+                        case 1:
+                            DropCol1P2();
+                            break;
+                        case 2:
+                            DropCol2P2();
+                            break;
+                        case 3:
+                            DropCol3P2();
+                            break;
+                        case 4:
+                            DropCol4P2();
+                            break;
+                        case 5:
+                            DropCol5P2();
+                            break;
+                        case 6:
+                            DropCol6P2();
+                            break;
+                        
+                    }
+                }
+                else
+                {
+                    Debug.Log("Crash");
+                }
             }
         }
     }
 
-    #region DropCols
-
+    //C moche mais flemme
+    #region DropColsPlayer1
+    
     public void DropCol0()
     {
+        if (!isplayerturn)
+        {
+            return;
+        }
+        
         if (!IsValidLocation(Board,0))
         {
             Debug.Log("Col full");
@@ -485,10 +529,17 @@ public class Thegame : MonoBehaviour
             Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
         }
         Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = false;
+        
     }
     
     public void DropCol1()
     {
+        if (!isplayerturn)
+        {
+            return;
+        }
+        
         if (!IsValidLocation(Board,1))
         {
             Debug.Log("Col full");
@@ -503,10 +554,16 @@ public class Thegame : MonoBehaviour
             Plateau.transform.Find("support.1" + row).gameObject.SetActive(true);
         }
         Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = false;
     }
     
     public void DropCol2()
     {
+        if (!isplayerturn)
+        {
+            return;
+        }
+        
         if (!IsValidLocation(Board,2))
         {
             Debug.Log("Col full");
@@ -521,10 +578,16 @@ public class Thegame : MonoBehaviour
             Plateau.transform.Find("support.2" + row).gameObject.SetActive(true);
         }
         Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = false;
     }
     
     public void DropCol3()
     {
+        if (!isplayerturn)
+        {
+            return;
+        }
+        
         if (!IsValidLocation(Board,3))
         {
             Debug.Log("Col full");
@@ -539,10 +602,16 @@ public class Thegame : MonoBehaviour
             Plateau.transform.Find("support.3" + row).gameObject.SetActive(true);
         }
         Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = false;
     }
     
     public void DropCol4()
     {
+        if (!isplayerturn)
+        {
+            return;
+        }
+        
         if (!IsValidLocation(Board,4))
         {
             Debug.Log("Col full");
@@ -557,10 +626,16 @@ public class Thegame : MonoBehaviour
             Plateau.transform.Find("support.4" + row).gameObject.SetActive(true);
         }
         Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = false;
     }
     
     public void DropCol5()
     {
+        if (!isplayerturn)
+        {
+            return;
+        }
+        
         if (!IsValidLocation(Board,5))
         {
             Debug.Log("Col full");
@@ -575,10 +650,16 @@ public class Thegame : MonoBehaviour
             Plateau.transform.Find("support.5" + row).gameObject.SetActive(true);
         }
         Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = false;
     }
     
     public void DropCol6()
     {
+        if (!isplayerturn)
+        {
+            return;
+        }
+        
         if (!IsValidLocation(Board,6))
         {
             Debug.Log("Col full");
@@ -593,6 +674,148 @@ public class Thegame : MonoBehaviour
             Plateau.transform.Find("support.6" + row).gameObject.SetActive(true);
         }
         Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = false;
+    }
+
+    #endregion
+
+    #region DropColsPlayer2
+
+    public void DropCol0P2()
+    {
+        
+        if (!IsValidLocation(Board,0))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 0);
+        DropPiece(Board,row,0,Player2Piece);
+        var spawn = new Vector3(265, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions2,spawn,transform.rotation);
+        isplayerturn = true;
+        
+    }
+    
+    public void DropCol1P2()
+    {
+        if (!IsValidLocation(Board,1))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 1);
+        DropPiece(Board,row,1,Player2Piece);
+        var spawn = new Vector3((float) 267.5, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.1" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions1,spawn,transform.rotation);
+        isplayerturn = true;
+    }
+    
+    public void DropCol2P2()
+    {
+        if (!IsValidLocation(Board,2))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 2);
+        DropPiece(Board,row,2,Player2Piece);
+        var spawn = new Vector3((float) 270.25, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.2" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions2,spawn,transform.rotation);
+        isplayerturn = true;
+    }
+    
+    public void DropCol3P2()
+    {
+        if (!IsValidLocation(Board,3))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 3);
+        DropPiece(Board,row,3,Player2Piece);
+        var spawn = new Vector3((float) 272.75, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.3" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions2,spawn,transform.rotation);
+        isplayerturn = true;
+    }
+    
+    public void DropCol4P2()
+    {
+        
+        if (!IsValidLocation(Board,4))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 4);
+        DropPiece(Board,row,4,Player2Piece);
+        var spawn = new Vector3((float) 275.25, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.4" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions2,spawn,transform.rotation);
+        isplayerturn = true;
+    }
+    
+    public void DropCol5P2()
+    {
+        if (!IsValidLocation(Board,5))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 5);
+        DropPiece(Board,row,5,Player2Piece);
+        var spawn = new Vector3((float) 277.75, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.5" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions2,spawn,transform.rotation);
+        isplayerturn = true;
+    }
+    
+    public void DropCol6P2()
+    {
+        
+        if (!IsValidLocation(Board,6))
+        {
+            Debug.Log("Col full");
+            return;
+        }
+
+        int row = GetNextOpenRow(Board, 6);
+        DropPiece(Board,row,6,Player2Piece);
+        var spawn = new Vector3((float) 280.25, 25, 120);
+        if (row != 5)
+        {
+            Plateau.transform.Find("support.6" + row).gameObject.SetActive(true);
+        }
+        Instantiate(Pions2,spawn,transform.rotation);
+        isplayerturn = true;
     }
 
     #endregion
