@@ -18,6 +18,7 @@ public class Thegame : MonoBehaviour
     const char Empty = '.';
     const char Player1Piece = '1';
     const char Player2Piece = '2';
+    private const int WindowLen = 4;
 
 
     public GameObject Pions1;
@@ -147,37 +148,37 @@ public class Thegame : MonoBehaviour
         {
             score += 100;
         }
-        
+
         if (blo.Count(c => piece == c) == 3 && blo.Count(c => Empty == c) == 1)
         {
             score += 15;
         }
-        
+
         if (blo.Count(c => piece == c) == 2 && blo.Count(c => Empty == c) == 2)
         {
             score += 5;
         }
-        
+
         if (blo.Count(c => piece == c) == 3 && blo.Count(c => Empty == c) == 1)
         {
             score += 2;
         }
-        
+
         if (blo.Count(c => opp_piece == c) == 4)
         {
             score -= 100;
         }
-        
+
         if (blo.Count(c => opp_piece == c) == 3 && blo.Count(c => Empty == c) == 1)
         {
             score -= 10;
         }
-        
+
         if (blo.Count(c => opp_piece == c) == 2 && blo.Count(c => Empty == c) == 2)
         {
             score -= 5;
         }
-        
+
         if (blo.Count(c => opp_piece == c) == 1 && blo.Count(c => Empty == c) == 3)
         {
             score -= 5;
@@ -186,7 +187,7 @@ public class Thegame : MonoBehaviour
         return score;
     }
 
-    private char[] MakeListVertical(char[][]b, int col)
+    private char[] MakeListVertical(char[][] b, int col)
     {
         List<char> res = new List<char>();
         for (int i = 0; i < RowCount; i++)
@@ -196,7 +197,7 @@ public class Thegame : MonoBehaviour
 
         return res.ToArray();
     }
-    private char[] MakeListHorizontal(char[][]b, int row)
+    private char[] MakeListHorizontal(char[][] b, int row)
     {
         return b[row];
     }
@@ -207,7 +208,7 @@ public class Thegame : MonoBehaviour
 
         for (int i = 0; i < WindowLen; i++)
         {
-            res.Add(b[row+i][col+i]);
+            res.Add(b[row + i][col + i]);
         }
 
         return res.ToArray();
@@ -219,7 +220,7 @@ public class Thegame : MonoBehaviour
 
         for (int i = 0; i < WindowLen; i++)
         {
-            res.Add(b[row+3-i][col+i]);
+            res.Add(b[row + 3 - i][col + i]);
         }
 
         return res.ToArray();
@@ -235,8 +236,7 @@ public class Thegame : MonoBehaviour
 
         return tamtam.ToArray();
     }
-    
-    private const int WindowLen = 4;
+
     
     private int ScorePosition(char[][] b, char piece)
     {
@@ -246,18 +246,18 @@ public class Thegame : MonoBehaviour
         char[] center = MakeListVertical(b, 3);
         int center_count = center.Count(c => c == piece);
         score += center_count * 2;
-        
+
         //Score Horizontal
         for (int r = 0; r < RowCount; r++)
         {
-            char[] row_array = MakeListHorizontal(b,r);
-            for (int c = 0; c < RowCount - 3; c++)
+            char[] row_array = MakeListHorizontal(b, r);
+            for (int c = 0; c < ColsCount - 3; c++)
             {
                 char[] window = Slice(row_array, c, c + WindowLen);
                 score += EvaluateBlock(window, piece);
             }
         }
-        
+
         //Score Vertical
         for (int c = 0; c < ColsCount; c++)
         {
@@ -268,7 +268,7 @@ public class Thegame : MonoBehaviour
                 score += EvaluateBlock(window, piece);
             }
         }
-        
+
         //Score Positive Slope
         for (int r = 0; r < RowCount - 3; r++)
         {
@@ -278,7 +278,7 @@ public class Thegame : MonoBehaviour
                 score += EvaluateBlock(window, piece);
             }
         }
-        
+
         //Score Negative Slope
         for (int r = 0; r < RowCount - 3; r++)
         {
@@ -299,7 +299,7 @@ public class Thegame : MonoBehaviour
         List<int> loc = new List<int>();
         for (int col = 0; col < ColsCount; col++)
         {
-            if (IsValidLocation(b, col))
+            if (IsValidLocation(b,col))
             {
                 loc.Add(col);
             }
@@ -349,84 +349,85 @@ public class Thegame : MonoBehaviour
         return res.ToArray();
     }
     
-    private (int?,int) Minimax(char[][] b, int depth, int alpha, int beta, bool maximizingPlayer)
-    {
-        int[] valid_locations = GetValidLocations(b);
-        bool is_terminal = IsTerminalNode(b);
-        if (depth == 0 || is_terminal)
-        {
-            if (is_terminal)
+    private (int?, int) Minimax(char[][] b, int depth, int alpha, int beta, bool maximizingPlayer)
             {
-                if (Win(b,Player2Piece))
+                int[] valid_locations = GetValidLocations(b);
+                bool is_terminal = IsTerminalNode(b);
+                if (depth == 0 || is_terminal)
                 {
-                    return (null,Int32.MaxValue);
+                    if (is_terminal)
+                    {
+                        if (Win(b, Player2Piece))
+                        {
+                            return (null, Int32.MaxValue);
+                        }
+                        if (Win(b, Player1Piece))
+                        {
+                            return (null, Int32.MinValue);
+                        }
+                        else
+                        {
+                            Console.WriteLine("yo");
+                            return (null, 0);
+                        }
+                    }
+                    else
+                    {
+                        return (null, ScorePosition(b, Player2Piece));
+                    }
                 }
-                else if (Win(b, Player1Piece))
+
+                if (maximizingPlayer)
                 {
-                    return (null, Int32.MinValue);
+                    int value = Int32.MinValue;
+                    int column = 3;
+                    foreach (var col in valid_locations)
+                    {
+                        int row = GetNextOpenRow(b, col);
+                        char[][] copy = Copy(b);
+                        DropPiece(copy, row, col, Player2Piece);
+                        int new_score = Minimax(copy, depth - 1, alpha, beta, false).Item2;
+                        if (new_score > value)
+                        {
+                            value = new_score;
+                            column = col;
+                        }
+
+                        alpha = Max(alpha, value);
+                        if (alpha >= beta)
+                        {
+                            break;
+                        }
+                    }
+
+                    return (column, value);
                 }
                 else
                 {
-                    return (null, 0);
+                    int value = Int32.MaxValue;
+                    int column = 3;
+                    foreach (var col in valid_locations)
+                    {
+                        int row = GetNextOpenRow(b, col);
+                        char[][] copy = Copy(b);
+                        DropPiece(copy, row, col, Player1Piece);
+                        int new_score = Minimax(copy, depth - 1, alpha, beta, true).Item2;
+                        if (new_score < value)
+                        {
+                            value = new_score;
+                            column = col;
+                        }
+
+                        beta = Min(beta, value);
+                        if (alpha >= beta)
+                        {
+                            break;
+                        }
+                    }
+
+                    return (column, value);
                 }
             }
-            else
-            {
-                return (null, ScorePosition(b, Player2Piece));
-            }
-        }
-
-        if (maximizingPlayer)
-        {
-            int value = Int32.MinValue;
-            int column = 3;
-            foreach (var col in valid_locations)
-            {
-                int row = GetNextOpenRow(b, col);
-                char[][] copy = Copy(b);
-                DropPiece(copy,row,col,Player2Piece);
-                int new_score = Minimax(copy, depth - 1, alpha, beta, false).Item2;
-                if (new_score > value)
-                {
-                    value = new_score;
-                    column = col;
-                }
-
-                alpha = Max(alpha, value);
-                if (alpha >= beta)
-                {
-                    break;
-                }
-            }
-
-            return (column, value);
-        }
-        else
-        {
-            int value = Int32.MaxValue;
-            int column = 3;
-            foreach (var col in valid_locations)
-            {
-                int row = GetNextOpenRow(b, col);
-                char[][] copy = Copy(b);
-                DropPiece(copy,row,col,Player1Piece);
-                int new_score = Minimax(copy, depth - 1, alpha, beta, true).Item2;
-                if (new_score < value)
-                {
-                    value = new_score;
-                    column = col;
-                }
-
-                beta = Min(beta, value);
-                if (alpha >= beta)
-                {
-                    break;
-                }
-            }
-
-            return (column, value);
-        }
-    }
     #endregion
 
     //setup the game
@@ -450,49 +451,50 @@ public class Thegame : MonoBehaviour
         }
     }
 
-    public char[][] Board;
+    private char[][] Board;
     private bool aienabled;
     private bool isplayerturn;
+    private bool notyet;
+
     public void Update()
     {
         if (Win(Board,Player1Piece) || Win(Board,Player2Piece))
         {
             Debug.Log("Game Finished");
+            return;
         }
 
         if (aienabled)
         {
-            if (!isplayerturn)
+            if (!isplayerturn && !notyet)
             {
+
                 var res = Minimax(Board, 5, Int32.MinValue, Int32.MaxValue, true);
                 if (IsValidLocation(Board,res.Item1))
                 {
-                    var past = DateTime.Now.Millisecond;
-                    
-                    
-                    int row = GetNextOpenRow(Board, (int)res.Item1);
-                    switch (row)
+                    notyet = true;
+                    switch (res.Item1)
                     {
                         case 0:
-                            DropCol0P2();
+                            Invoke("DropCol0P2",3);
                             break;
                         case 1:
-                            DropCol1P2();
+                            Invoke("DropCol1P2",3);
                             break;
                         case 2:
-                            DropCol2P2();
+                            Invoke("DropCol2P2",3);
                             break;
                         case 3:
-                            DropCol3P2();
+                            Invoke("DropCol3P2",3);
                             break;
                         case 4:
-                            DropCol4P2();
+                            Invoke("DropCol4P2",3);
                             break;
                         case 5:
-                            DropCol5P2();
+                            Invoke("DropCol5P2",3);
                             break;
                         case 6:
-                            DropCol6P2();
+                            Invoke("DropCol6P2",3);
                             break;
                         
                     }
@@ -530,7 +532,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions1,spawn,transform.rotation);
         isplayerturn = false;
-        
+        notyet = false;
     }
     
     public void DropCol1()
@@ -555,6 +557,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions1,spawn,transform.rotation);
         isplayerturn = false;
+        notyet = false;
     }
     
     public void DropCol2()
@@ -579,6 +582,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions1,spawn,transform.rotation);
         isplayerturn = false;
+        notyet = false;
     }
     
     public void DropCol3()
@@ -603,6 +607,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions1,spawn,transform.rotation);
         isplayerturn = false;
+        notyet = false;
     }
     
     public void DropCol4()
@@ -627,6 +632,8 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions1,spawn,transform.rotation);
         isplayerturn = false;
+        notyet = false;
+
     }
     
     public void DropCol5()
@@ -651,6 +658,8 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions1,spawn,transform.rotation);
         isplayerturn = false;
+        notyet = false;
+
     }
     
     public void DropCol6()
@@ -675,6 +684,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions1,spawn,transform.rotation);
         isplayerturn = false;
+        notyet = false;
     }
 
     #endregion
@@ -691,7 +701,6 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 0);
-        DropPiece(Board,row,0,Player2Piece);
         var spawn = new Vector3(265, 25, 120);
         if (row != 5)
         {
@@ -699,6 +708,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
+        Board[row][0] = '2';
         
     }
     
@@ -711,14 +721,14 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 1);
-        DropPiece(Board,row,1,Player2Piece);
         var spawn = new Vector3((float) 267.5, 25, 120);
         if (row != 5)
         {
             Plateau.transform.Find("support.1" + row).gameObject.SetActive(true);
         }
-        Instantiate(Pions1,spawn,transform.rotation);
+        Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
+        Board[row][1] = '2';
     }
     
     public void DropCol2P2()
@@ -730,7 +740,6 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 2);
-        DropPiece(Board,row,2,Player2Piece);
         var spawn = new Vector3((float) 270.25, 25, 120);
         if (row != 5)
         {
@@ -738,6 +747,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
+        Board[row][2] = '2';
     }
     
     public void DropCol3P2()
@@ -749,7 +759,6 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 3);
-        DropPiece(Board,row,3,Player2Piece);
         var spawn = new Vector3((float) 272.75, 25, 120);
         if (row != 5)
         {
@@ -757,6 +766,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
+        Board[row][3] = '2';
     }
     
     public void DropCol4P2()
@@ -769,7 +779,6 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 4);
-        DropPiece(Board,row,4,Player2Piece);
         var spawn = new Vector3((float) 275.25, 25, 120);
         if (row != 5)
         {
@@ -777,6 +786,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
+        Board[row][4] = '2';
     }
     
     public void DropCol5P2()
@@ -788,7 +798,7 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 5);
-        DropPiece(Board,row,5,Player2Piece);
+        Debug.Log(row);
         var spawn = new Vector3((float) 277.75, 25, 120);
         if (row != 5)
         {
@@ -796,6 +806,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
+        Board[row][5] = '2';
     }
     
     public void DropCol6P2()
@@ -808,7 +819,6 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 6);
-        DropPiece(Board,row,6,Player2Piece);
         var spawn = new Vector3((float) 280.25, 25, 120);
         if (row != 5)
         {
@@ -816,6 +826,7 @@ public class Thegame : MonoBehaviour
         }
         Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
+        Board[row][6] = '2';
     }
 
     #endregion
