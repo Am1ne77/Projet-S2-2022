@@ -19,12 +19,21 @@ public class Thegame : MonoBehaviour
     const char Player1Piece = '1';
     const char Player2Piece = '2';
     private const int WindowLen = 4;
+    
+    private char[][] Board;
+    private bool aienabled;
+    private bool isplayerturn;
+    private bool notyet;
+    private bool gamestarted;
+    private int AiDifficulty;
 
 
     public GameObject Pions1;
     public GameObject Pions2;
     public GameObject Plateau;
     public GameObject Buttons;
+    public Text TurnIndicator;
+    public Canvas DifficultyCanvas;
 
     //Initialise the board
     private char[][] CreateBoard()
@@ -130,6 +139,11 @@ public class Thegame : MonoBehaviour
         }
 
         return false;
+    }
+
+    private bool Draw(char[][] b)
+    {
+        return b[0].Count(c => c == '.') == 0;
     }
 
 
@@ -450,17 +464,25 @@ public class Thegame : MonoBehaviour
             aienabled = true;
             isplayerturn = true;
         }
-    }
 
-    private char[][] Board;
-    private bool aienabled;
-    private bool isplayerturn;
-    private bool notyet;
+        gamestarted = false;
+        //TurnIndicator.gameObject.SetActive(false);
+        DifficultyCanvas.gameObject.SetActive(true);
+        
+        for (int i = 0; i < 7; i++)
+        {
+            Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(false);
+        }
+    }
 
     public void Update()
     {
-        
-        if (Win(Board,Player1Piece) || Win(Board,Player2Piece))
+        if (!gamestarted)
+        {
+            return;
+        }
+
+        if (Win(Board,Player1Piece) || Win(Board,Player2Piece) || Draw(Board))
         {
             Debug.Log("Game Finished");
             return;
@@ -472,7 +494,7 @@ public class Thegame : MonoBehaviour
             {
 
                 ToggleButtons();
-                var res = Minimax(Board, 5, Int32.MinValue, Int32.MaxValue, true);
+                var res = Minimax(Board, AiDifficulty, Int32.MinValue, Int32.MaxValue, true);
                 if (IsValidLocation(Board,res.Item1))
                 {
                     notyet = true;
@@ -853,6 +875,52 @@ public class Thegame : MonoBehaviour
         Instantiate(Pions2,spawn,transform.rotation);
         isplayerturn = true;
         Board[row][6] = '2';
+    }
+
+    #endregion
+
+    #region Difficulty Chooser
+
+    public void PussyAss()
+    {
+        AiDifficulty = 2;
+        
+        gamestarted = true;
+        TurnIndicator.gameObject.SetActive(true);
+        DifficultyCanvas.gameObject.SetActive(false);
+        
+        for (int i = 0; i < 7; i++)
+        {
+            Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(true);
+        }
+    }
+
+    public void MediumAss()
+    {
+        AiDifficulty = 3;
+        
+        gamestarted = true;
+        TurnIndicator.gameObject.SetActive(true);
+        DifficultyCanvas.gameObject.SetActive(false);
+        
+        for (int i = 0; i < 7; i++)
+        {
+            Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(true);
+        }
+    }
+
+    public void BadAss()
+    {
+        AiDifficulty = 5;
+        
+        gamestarted = true;
+        TurnIndicator.gameObject.SetActive(true);
+        DifficultyCanvas.gameObject.SetActive(false);
+        
+        for (int i = 0; i < 7; i++)
+        {
+            Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(true);
+        }
     }
 
     #endregion
