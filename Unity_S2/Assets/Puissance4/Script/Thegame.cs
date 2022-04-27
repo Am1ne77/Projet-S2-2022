@@ -24,6 +24,7 @@ public class Thegame : MonoBehaviour
     public GameObject Pions1;
     public GameObject Pions2;
     public GameObject Plateau;
+    public GameObject Buttons;
 
     //Initialise the board
     private char[][] CreateBoard()
@@ -469,6 +470,7 @@ public class Thegame : MonoBehaviour
             if (!isplayerturn && !notyet)
             {
 
+                ToggleButtons();
                 var res = Minimax(Board, 5, Int32.MinValue, Int32.MaxValue, true);
                 if (IsValidLocation(Board,res.Item1))
                 {
@@ -498,12 +500,23 @@ public class Thegame : MonoBehaviour
                             break;
                         
                     }
+                    Invoke("ToggleButtons",6);
                 }
                 else
                 {
                     Debug.Log("Crash");
                 }
             }
+        }
+    }
+
+    public void ToggleButtons()
+    {
+        bool active = !Buttons.transform.Find("Button_Col_0_").gameObject.activeInHierarchy;
+
+        for (int i = 0; i < 7; i++)
+        {
+            Buttons.transform.Find("Button_Col_" + i +"_").gameObject.SetActive(active);
         }
     }
 
