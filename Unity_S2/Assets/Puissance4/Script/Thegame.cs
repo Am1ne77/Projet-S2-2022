@@ -35,6 +35,11 @@ public class Thegame : MonoBehaviour
     public Text TurnIndicator;
     public Canvas DifficultyCanvas;
 
+    public GameObject EndGameUi;
+    public GameObject YouWonUi;
+    public GameObject YouLostUi;
+    public GameObject DrawUi;
+
     //Initialise the board
     private char[][] CreateBoard()
     {
@@ -484,8 +489,26 @@ public class Thegame : MonoBehaviour
 
         if (Win(Board,Player1Piece) || Win(Board,Player2Piece) || Draw(Board))
         {
-            Debug.Log("Game Finished");
-            return;
+            TurnIndicator.gameObject.SetActive(false);
+            EndGameUi.SetActive(true);
+            
+            if (Win(Board,Player1Piece))
+            {
+                YouWonUi.SetActive(true);
+            }
+            else
+            {
+                if (Draw(Board))
+                {
+                    DrawUi.SetActive(true);
+                }
+                else
+                {
+                    YouLostUi.SetActive(true);
+                }
+            }
+
+            gamestarted = false;
         }
 
         if (aienabled)
@@ -536,17 +559,21 @@ public class Thegame : MonoBehaviour
     public void ToggleButtons()
     {
         bool active = !Buttons.transform.Find("Button_Col_0_").gameObject.activeInHierarchy;
-        
-        Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
-        if (active)
+
+        if (TurnIndicator.gameObject.activeInHierarchy)
         {
-            toChange.text = "Your Turn !";
-            toChange.color = new Color((248.0f / 255.0f), (144.0f / 255.0f), (231.0f / 255.0f));
-        }
-        else
-        {
-            toChange.text = "Wait ...";
-            toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
+
+            Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
+            if (active)
+            {
+                toChange.text = "Your Turn !";
+                toChange.color = new Color((248.0f / 255.0f), (144.0f / 255.0f), (231.0f / 255.0f));
+            }
+            else
+            {
+                toChange.text = "Wait ...";
+                toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
+            }
         }
 
         for (int i = 0; i < 7; i++)
@@ -921,6 +948,50 @@ public class Thegame : MonoBehaviour
         {
             Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(true);
         }
+    }
+
+    #endregion
+
+    #region Eog
+
+    public void Exit()
+    {
+        
+    }
+
+    public void PlayAgain()
+    {
+        EndGameUi.SetActive(false);
+        YouLostUi.SetActive(false);
+        YouWonUi.SetActive(false);
+        DrawUi.SetActive(false);
+        
+        
+        TurnIndicator.gameObject.SetActive(true);
+
+        DifficultyCanvas.gameObject.SetActive(true);
+        Board = setup();
+
+        GameObject[] allpawns = GameObject.FindGameObjectsWithTag("Pion");
+        foreach (var pawn in allpawns)
+        {
+            GameObject.Destroy(pawn);
+        }
+
+        isplayerturn = true;
+        
+        Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
+        if (isplayerturn)
+        {
+            toChange.text = "Your Turn !";
+            toChange.color = new Color((248.0f / 255.0f), (144.0f / 255.0f), (231.0f / 255.0f));
+        }
+        else
+        {
+            toChange.text = "Wait ...";
+            toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
+        }
+        
     }
 
     #endregion
