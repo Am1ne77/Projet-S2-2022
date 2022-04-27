@@ -166,7 +166,7 @@ public class Thegame : MonoBehaviour
 
         if (blo.Count(c => opp_piece == c) == 4)
         {
-            score -= 100;
+            score -= 75;
         }
 
         if (blo.Count(c => opp_piece == c) == 3 && blo.Count(c => Empty == c) == 1)
@@ -176,12 +176,12 @@ public class Thegame : MonoBehaviour
 
         if (blo.Count(c => opp_piece == c) == 2 && blo.Count(c => Empty == c) == 2)
         {
-            score -= 5;
+            score -= 3;
         }
 
         if (blo.Count(c => opp_piece == c) == 1 && blo.Count(c => Empty == c) == 3)
         {
-            score -= 5;
+            score -= 1;
         }
 
         return score;
