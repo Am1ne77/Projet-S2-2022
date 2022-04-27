@@ -9,6 +9,7 @@ using Photon.Pun;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Thegame : MonoBehaviour
 {
@@ -467,7 +468,7 @@ public class Thegame : MonoBehaviour
         else
         {
             aienabled = true;
-            isplayerturn = true;
+            isplayerturn = isplayerturn = Random.Range(0,2) == 1;;
         }
 
         gamestarted = false;
@@ -978,7 +979,7 @@ public class Thegame : MonoBehaviour
             GameObject.Destroy(pawn);
         }
 
-        isplayerturn = true;
+        isplayerturn = Random.Range(0,2) == 1;
         
         Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
         if (isplayerturn)
