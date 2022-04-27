@@ -459,19 +459,7 @@ public class Thegame : MonoBehaviour
 
     public void Update()
     {
-        //changing text and color of the text
-        Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
-        if (isplayerturn)
-        {
-            toChange.text = "Your Turn !";
-            toChange.color = new Color((248.0f / 255.0f), (144.0f / 255.0f), (231.0f / 255.0f));
-        }
-        else
-        {
-            toChange.text = "Wait ...";
-            toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
-        }
-
+        
         if (Win(Board,Player1Piece) || Win(Board,Player2Piece))
         {
             Debug.Log("Game Finished");
@@ -526,6 +514,18 @@ public class Thegame : MonoBehaviour
     public void ToggleButtons()
     {
         bool active = !Buttons.transform.Find("Button_Col_0_").gameObject.activeInHierarchy;
+        
+        Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
+        if (active)
+        {
+            toChange.text = "Your Turn !";
+            toChange.color = new Color((248.0f / 255.0f), (144.0f / 255.0f), (231.0f / 255.0f));
+        }
+        else
+        {
+            toChange.text = "Wait ...";
+            toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
+        }
 
         for (int i = 0; i < 7; i++)
         {
