@@ -458,6 +458,19 @@ public class Thegame : MonoBehaviour
 
     public void Update()
     {
+        //changing text and color of the text
+        Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
+        if (isplayerturn)
+        {
+            toChange.text = "Your Turn !";
+            toChange.color = new Color((248.0f / 255.0f), (144.0f / 255.0f), (231.0f / 255.0f));
+        }
+        else
+        {
+            toChange.text = "Wait ...";
+            toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
+        }
+
         if (Win(Board,Player1Piece) || Win(Board,Player2Piece))
         {
             Debug.Log("Game Finished");
