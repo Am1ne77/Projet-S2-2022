@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,8 @@ public class Thegame : MonoBehaviour
     private bool notyet;
     private bool gamestarted;
     private int AiDifficulty;
+    private int turn;
+    private Player[] listPlayer;
 
 
     public GameObject Pions1;
@@ -464,11 +467,26 @@ public class Thegame : MonoBehaviour
         if (PhotonNetwork.IsConnected)
         {
             aienabled = PhotonNetwork.CurrentRoom.PlayerCount != 2;
+            if (!aienabled)
+            {
+                turn = 0;
+                listPlayer = PhotonNetwork.PlayerList;
+                if (Random.Range(0,2) == 1)
+                {
+                    (listPlayer[0],listPlayer[1]) = (listPlayer[1],listPlayer[0]);
+                }
+            }
+            else
+            {
+                aienabled = true;
+                isplayerturn = isplayerturn = Random.Range(0,2) == 1;;
+            }
+            
         }
         else
         {
             aienabled = true;
-            isplayerturn = isplayerturn = Random.Range(0,2) == 1;;
+            isplayerturn = isplayerturn = Random.Range(0,2) == 1;
         }
 
         gamestarted = false;
@@ -483,76 +501,126 @@ public class Thegame : MonoBehaviour
 
     public void Update()
     {
+        
         if (!gamestarted)
         {
             return;
         }
 
-        if (Win(Board,Player1Piece) || Win(Board,Player2Piece) || Draw(Board))
+        if (aienabled)
         {
-            TurnIndicator.gameObject.SetActive(false);
-            EndGameUi.SetActive(true);
-            
-            if (Win(Board,Player1Piece))
+            if (Win(Board, Player1Piece) || Win(Board, Player2Piece) || Draw(Board))
             {
-                YouWonUi.SetActive(true);
-            }
-            else
-            {
-                if (Draw(Board))
+                TurnIndicator.gameObject.SetActive(false);
+                EndGameUi.SetActive(true);
+
+                if (Win(Board, Player1Piece))
                 {
-                    DrawUi.SetActive(true);
+                    YouWonUi.SetActive(true);
                 }
                 else
                 {
-                    YouLostUi.SetActive(true);
+                    if (Draw(Board))
+                    {
+                        DrawUi.SetActive(true);
+                    }
+                    else
+                    {
+                        YouLostUi.SetActive(true);
+                    }
                 }
+
+                gamestarted = false;
             }
 
-            gamestarted = false;
-        }
-
-        if (aienabled)
-        {
             if (!isplayerturn && !notyet)
             {
-
                 ToggleButtons();
                 var res = Minimax(Board, AiDifficulty, Int32.MinValue, Int32.MaxValue, true);
-                if (IsValidLocation(Board,res.Item1))
+                if (IsValidLocation(Board, res.Item1))
                 {
                     notyet = true;
                     switch (res.Item1)
                     {
                         case 0:
-                            Invoke("DropCol0P2",3);
+                            Invoke("DropCol0P2", 3);
                             break;
                         case 1:
-                            Invoke("DropCol1P2",3);
+                            Invoke("DropCol1P2", 3);
                             break;
                         case 2:
-                            Invoke("DropCol2P2",3);
+                            Invoke("DropCol2P2", 3);
                             break;
                         case 3:
-                            Invoke("DropCol3P2",3);
+                            Invoke("DropCol3P2", 3);
                             break;
                         case 4:
-                            Invoke("DropCol4P2",3);
+                            Invoke("DropCol4P2", 3);
                             break;
                         case 5:
-                            Invoke("DropCol5P2",3);
+                            Invoke("DropCol5P2", 3);
                             break;
                         case 6:
-                            Invoke("DropCol6P2",3);
+                            Invoke("DropCol6P2", 3);
                             break;
-                        
                     }
-                    Invoke("ToggleButtons",6);
+
+                    Invoke("ToggleButtons", 6);
                 }
                 else
                 {
                     Debug.Log("Crash");
                 }
+            }
+        }
+        else
+        {
+            if (!gamestarted)
+            {
+                return;
+            }
+            
+            if (Win(Board, Player1Piece) || Win(Board, Player2Piece) || Draw(Board))
+            {
+                TurnIndicator.gameObject.SetActive(false);
+                EndGameUi.SetActive(true);
+
+                if (Win(Board, Player1Piece))
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        YouWonUi.SetActive(true);
+                    }
+                    else
+                    {
+                        YouLostUi.SetActive(true);
+                    }
+                }
+                else
+                {
+                    if (Draw(Board))
+                    {
+                        DrawUi.SetActive(true);
+                    }
+                    else
+                    {
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            YouLostUi.SetActive(true);
+                        }
+                        else
+                        {
+                            YouWonUi.SetActive(true);
+                        }
+                    }
+                }
+
+                gamestarted = false;
+            }
+            
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
             }
         }
     }
@@ -588,179 +656,436 @@ public class Thegame : MonoBehaviour
     
     public void DropCol0()
     {
-        if (!isplayerturn)
+        if (aienabled)
         {
-            return;
-        }
-        
-        if (!IsValidLocation(Board,0))
-        {
-            Debug.Log("Col full");
-            return;
-        }
 
-        int row = GetNextOpenRow(Board, 0);
-        DropPiece(Board,row,0,Player1Piece);
-        var spawn = new Vector3(265, 25, 120);
-        if (row != 5)
-        {
-            Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+            if (!isplayerturn)
+            {
+                return;
+            }
+
+            if (!IsValidLocation(Board, 0))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            int row = GetNextOpenRow(Board, 0);
+            DropPiece(Board, row, 0, Player1Piece);
+            var spawn = new Vector3(265, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(Pions1, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
         }
-        Instantiate(Pions1,spawn,transform.rotation);
-        isplayerturn = false;
-        notyet = false;
+        else
+        {
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+            if (!IsValidLocation(Board, 0))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            char p = Player1Piece;
+            GameObject r = Pions1;
+            int row = GetNextOpenRow(Board, 0);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                p = Player2Piece;
+                r = Pions2;
+            }
+            
+            DropPiece(Board, row, 0, p);
+            var spawn = new Vector3(265, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(r, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
+        }
     }
     
     public void DropCol1()
     {
-        if (!isplayerturn)
+        if (aienabled)
         {
-            return;
-        }
-        
-        if (!IsValidLocation(Board,1))
-        {
-            Debug.Log("Col full");
-            return;
-        }
+            if (!isplayerturn)
+            {
+                return;
+            }
 
-        int row = GetNextOpenRow(Board, 1);
-        DropPiece(Board,row,1,Player1Piece);
-        var spawn = new Vector3((float) 267.5, 25, 120);
-        if (row != 5)
-        {
-            Plateau.transform.Find("support.1" + row).gameObject.SetActive(true);
+            if (!IsValidLocation(Board, 1))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            int row = GetNextOpenRow(Board, 1);
+            DropPiece(Board, row, 1, Player1Piece);
+            var spawn = new Vector3((float) 267.5, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.1" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(Pions1, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
         }
-        Instantiate(Pions1,spawn,transform.rotation);
-        isplayerturn = false;
-        notyet = false;
+        else
+        {
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+            if (!IsValidLocation(Board, 1))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            char p = Player1Piece;
+            GameObject r = Pions1;
+            int row = GetNextOpenRow(Board, 1);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                p = Player2Piece;
+                r = Pions2;
+            }
+            
+            DropPiece(Board, row, 1, p);
+            var spawn = new Vector3((float) 267.5, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.1" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(r, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
+        }
     }
     
     public void DropCol2()
     {
-        if (!isplayerturn)
+        if (aienabled)
         {
-            return;
-        }
-        
-        if (!IsValidLocation(Board,2))
-        {
-            Debug.Log("Col full");
-            return;
-        }
 
-        int row = GetNextOpenRow(Board, 2);
-        DropPiece(Board,row,2,Player1Piece);
-        var spawn = new Vector3((float) 270.25, 25, 120);
-        if (row != 5)
-        {
-            Plateau.transform.Find("support.2" + row).gameObject.SetActive(true);
+
+            if (!isplayerturn)
+            {
+                return;
+            }
+
+            if (!IsValidLocation(Board, 2))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            int row = GetNextOpenRow(Board, 2);
+            DropPiece(Board, row, 2, Player1Piece);
+            var spawn = new Vector3((float) 270.25, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.2" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(Pions1, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
         }
-        Instantiate(Pions1,spawn,transform.rotation);
-        isplayerturn = false;
-        notyet = false;
+        else
+        {
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+            if (!IsValidLocation(Board, 2))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            char p = Player1Piece;
+            GameObject r = Pions1;
+            int row = GetNextOpenRow(Board, 2);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                p = Player2Piece;
+                r = Pions2;
+            }
+            
+            DropPiece(Board, row, 2, p);
+            var spawn = new Vector3((float) 270.25, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.2" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(r, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
+        }
     }
     
     public void DropCol3()
     {
-        if (!isplayerturn)
+        if (aienabled)
         {
-            return;
-        }
-        
-        if (!IsValidLocation(Board,3))
-        {
-            Debug.Log("Col full");
-            return;
-        }
 
-        int row = GetNextOpenRow(Board, 3);
-        DropPiece(Board,row,3,Player1Piece);
-        var spawn = new Vector3((float) 272.75, 25, 120);
-        if (row != 5)
-        {
-            Plateau.transform.Find("support.3" + row).gameObject.SetActive(true);
+            if (!isplayerturn)
+            {
+                return;
+            }
+
+            if (!IsValidLocation(Board, 3))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            int row = GetNextOpenRow(Board, 3);
+            DropPiece(Board, row, 3, Player1Piece);
+            var spawn = new Vector3((float) 272.75, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.3" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(Pions1, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
         }
-        Instantiate(Pions1,spawn,transform.rotation);
-        isplayerturn = false;
-        notyet = false;
+        else
+        {
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+            if (!IsValidLocation(Board, 3))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            char p = Player1Piece;
+            GameObject r = Pions1;
+            int row = GetNextOpenRow(Board, 3);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                p = Player2Piece;
+                r = Pions2;
+            }
+            
+            DropPiece(Board, row, 3, p);
+            var spawn = new Vector3((float) 272.75, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.3" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(r, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
+        }
     }
     
     public void DropCol4()
     {
-        if (!isplayerturn)
+        if (aienabled)
         {
-            return;
-        }
-        
-        if (!IsValidLocation(Board,4))
-        {
-            Debug.Log("Col full");
-            return;
-        }
+            if (!isplayerturn)
+            {
+                return;
+            }
 
-        int row = GetNextOpenRow(Board, 4);
-        DropPiece(Board,row,4,Player1Piece);
-        var spawn = new Vector3((float) 275.25, 25, 120);
-        if (row != 5)
-        {
-            Plateau.transform.Find("support.4" + row).gameObject.SetActive(true);
+            if (!IsValidLocation(Board, 4))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            int row = GetNextOpenRow(Board, 4);
+            DropPiece(Board, row, 4, Player1Piece);
+            var spawn = new Vector3((float) 275.25, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.4" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(Pions1, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
         }
-        Instantiate(Pions1,spawn,transform.rotation);
-        isplayerturn = false;
-        notyet = false;
+        else
+        {
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+            if (!IsValidLocation(Board, 4))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            char p = Player1Piece;
+            GameObject r = Pions1;
+            int row = GetNextOpenRow(Board, 4);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                p = Player2Piece;
+                r = Pions2;
+            }
+            
+            DropPiece(Board, row, 4, p);
+            var spawn = new Vector3((float) 275.25, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.4" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(r, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
+        }
 
     }
     
     public void DropCol5()
     {
-        if (!isplayerturn)
+        if (aienabled)
         {
-            return;
-        }
-        
-        if (!IsValidLocation(Board,5))
-        {
-            Debug.Log("Col full");
-            return;
-        }
+            if (!isplayerturn)
+            {
+                return;
+            }
 
-        int row = GetNextOpenRow(Board, 5);
-        DropPiece(Board,row,5,Player1Piece);
-        var spawn = new Vector3((float) 277.75, 25, 120);
-        if (row != 5)
-        {
-            Plateau.transform.Find("support.5" + row).gameObject.SetActive(true);
+            if (!IsValidLocation(Board, 5))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            int row = GetNextOpenRow(Board, 5);
+            DropPiece(Board, row, 5, Player1Piece);
+            var spawn = new Vector3((float) 277.75, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.5" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(Pions1, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
         }
-        Instantiate(Pions1,spawn,transform.rotation);
-        isplayerturn = false;
-        notyet = false;
+        else
+        {
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+            if (!IsValidLocation(Board, 5))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            char p = Player1Piece;
+            GameObject r = Pions1;
+            int row = GetNextOpenRow(Board, 5);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                p = Player2Piece;
+                r = Pions2;
+            }
+            
+            DropPiece(Board, row, 5, p);
+            var spawn = new Vector3((float) 277.75, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.5" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(r, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
+        }
 
     }
     
     public void DropCol6()
     {
-        if (!isplayerturn)
+        if (aienabled)
         {
-            return;
-        }
-        
-        if (!IsValidLocation(Board,6))
-        {
-            Debug.Log("Col full");
-            return;
-        }
 
-        int row = GetNextOpenRow(Board, 6);
-        DropPiece(Board,row,6,Player1Piece);
-        var spawn = new Vector3((float) 280.25, 25, 120);
-        if (row != 5)
-        {
-            Plateau.transform.Find("support.6" + row).gameObject.SetActive(true);
+            if (!isplayerturn)
+            {
+                return;
+            }
+
+            if (!IsValidLocation(Board, 6))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            int row = GetNextOpenRow(Board, 6);
+            DropPiece(Board, row, 6, Player1Piece);
+            var spawn = new Vector3((float) 280.25, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.6" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(Pions1, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
         }
-        Instantiate(Pions1,spawn,transform.rotation);
-        isplayerturn = false;
-        notyet = false;
+        else
+        {
+            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            {
+                return;
+            }
+            if (!IsValidLocation(Board, 6))
+            {
+                Debug.Log("Col full");
+                return;
+            }
+
+            char p = Player1Piece;
+            GameObject r = Pions1;
+            int row = GetNextOpenRow(Board, 6);
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                p = Player2Piece;
+                r = Pions2;
+            }
+            
+            DropPiece(Board, row, 6, p);
+            var spawn = new Vector3((float) 280.25, 25, 120);
+            if (row != 5)
+            {
+                Plateau.transform.Find("support.6" + row).gameObject.SetActive(true);
+            }
+
+            Instantiate(r, spawn, transform.rotation);
+            isplayerturn = false;
+            notyet = false;
+        }
     }
 
     #endregion
