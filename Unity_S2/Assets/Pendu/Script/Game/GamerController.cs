@@ -70,7 +70,7 @@ namespace Game
         {
             Firebase = FirebaseManager.Instance;
             
-            score = Firebase.xpField;
+            score = Firebase.xpPendu;
             //hangman = GameObject.FindGameObjectsWithTag("Player").GetComponent<HangmanController>();
             reset();
             Debug.Log(word);
@@ -140,7 +140,7 @@ namespace Game
         {
             bool ret = false;
             int complete = 0; 
-            score = Firebase.xpField;
+            score = Firebase.xpPendu;
                 
             Debug.LogFormat(Firebase.xpField.ToString());
             for (int i = 0; i < revealed.Length; i++)
@@ -150,13 +150,15 @@ namespace Game
                     ret = true;
                     if (revealed[i] == 0)
                     {
-                        revealed[i] = (char) c;
+                        
                         score += 100;
+                        revealed[i] = (char) c;
                     }
                 }
-                else score -= 100;
                 if (revealed[i] != 0)
+                {
                     complete++;
+                }
                
             }
 
@@ -165,7 +167,7 @@ namespace Game
                 if (complete == revealed.Length)
                 {
                     this.completed = true;
-                    this.score += revealed.Length +100*complete;
+                    this.score += revealed.Length +100 *complete;
                 }
                 UpdateWorldIndicator();
                 updateIndicatorScore();
@@ -177,6 +179,8 @@ namespace Game
                 letterIndicator.text += c;
                 nb_errors++;
                 ManPhase++;
+                score -= 100;
+                updateIndicatorScore();
                 Bonhomme.transform.Find("Man" + ManPhase).gameObject.SetActive(true);
                 if (ManPhase > 1)
                 {
@@ -217,6 +221,8 @@ namespace Game
 
         private void updateIndicatorScore()
         {
+            
+            Firebase.xpPendu = score;
             scoreIndicator.text = "Score: " + score;
         }
 
@@ -253,6 +259,9 @@ namespace Game
         }
         public void reset()
         {
+            
+            Firebase.xpPendu = score;
+            Firebase.SaveDataButton("Pendu");
             nb_errors = 0;
             ManPhase = 0;
             completed = false;
@@ -276,8 +285,8 @@ namespace Game
 
         public void OnExitCLick()
         {
-            Firebase.xpField = score;
-            Firebase.SaveDataButton();
+            Firebase.xpPendu = score;
+            Firebase.SaveDataButton("Pendu");
             // DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
            // WriteNewScore(DBreference.Child("users").Child(User.UserId).GetValueAsync(), score);
             PhotonNetwork.LoadLevel(0);

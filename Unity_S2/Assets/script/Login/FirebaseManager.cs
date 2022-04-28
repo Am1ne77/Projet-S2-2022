@@ -42,6 +42,9 @@ namespace Data
         public string usernameField ;
 
         public int xpField;
+        public int xpPendu;
+        public int xpPuissance4;
+        public int xpMiniTank;
 
         /* public TMP_InputField killsField;
          public TMP_InputField deathsField;
@@ -123,12 +126,17 @@ namespace Data
         }
 
         //Function for the save button
-        public void SaveDataButton()
+        public void SaveDataButton(string game)
         {
             StartCoroutine(UpdateUsernameAuth(usernameField));
             StartCoroutine(UpdateUsernameDatabase(usernameField));
 
-            StartCoroutine(UpdateXp(xpField));
+            StartCoroutine(UpdateXp(xpField+xpPendu+xpPuissance4+xpMiniTank));
+            
+            StartCoroutine(UpdateXpPendu(xpPendu));
+            StartCoroutine(UpdateXpPuissance4(xpPuissance4));
+            StartCoroutine(UpdateXpMiniTank(xpMiniTank));
+            
             /* StartCoroutine(UpdateKills(int.Parse(killsField.text)));
              StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));*/
         }
@@ -316,11 +324,71 @@ namespace Data
         public IEnumerator UpdateXp(int _xp)
         {
             //Set the currently logged in user xp
+            
             var DBTask = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_xp);
 
             yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+            //yield return new WaitUntil(predicate: () => DBTask1.IsCompleted);
 
             if (DBTask.Exception != null)
+            {
+                Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+            }
+            else
+            {
+                //Xp is now updated
+            }
+        }
+
+        public IEnumerator UpdateXpPendu(int _xp)
+        {
+            //Set the currently logged in user xp
+
+
+            var DBTask = DBreference.Child("users").Child(User.UserId).Child("xpPendu").SetValueAsync(_xp);
+
+            yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+            //yield return new WaitUntil(predicate: () => DBTask1.IsCompleted);
+
+            if (DBTask.Exception != null)
+            {
+                Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+            }
+            else
+            {
+                //Xp is now updated
+            }
+        }
+        public IEnumerator UpdateXpPuissance4(int _xp)
+        {
+            //Set the currently logged in user xp
+
+
+            var DBTask = DBreference.Child("users").Child(User.UserId).Child("xpPuissance4").SetValueAsync(_xp);
+
+            yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+            //yield return new WaitUntil(predicate: () => DBTask1.IsCompleted);
+
+            if (DBTask.Exception != null)
+            {
+                Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+            }
+            else
+            {
+                //Xp is now updated
+            }
+        }
+        public IEnumerator UpdateXpMiniTank(int _xp)
+        {
+            //Set the currently logged in user xp
+
+
+            var DBTask = DBreference.Child("users").Child(User.UserId).Child("xpMiniTank").SetValueAsync(_xp);
+
+            yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+            //yield return new WaitUntil(predicate: () => DBTask1.IsCompleted);
+
+            if (DBTask.Exception != null )
             {
                 Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
             }
@@ -347,6 +415,9 @@ namespace Data
             {
                 //No data exists yet
                 xpField=0 ;
+                xpPendu = 0;
+                xpPuissance4 = 0;
+                xpMiniTank = 0;
             }
             else
             {
@@ -355,6 +426,9 @@ namespace Data
                 usernameField = snapshot.Child("username").Value.ToString();
 
                 xpField = Int32.Parse(snapshot.Child("xp").Value.ToString());
+                xpPendu = Int32.Parse(snapshot.Child("xpPendu").Value.ToString());
+                xpPuissance4 = Int32.Parse(snapshot.Child("xpPuissance4").Value.ToString());
+                xpMiniTank = Int32.Parse(snapshot.Child("xpMiniTank").Value.ToString());
             }
         }
  		/*private void WriteNewScore (int score) 
