@@ -518,7 +518,7 @@ public class Thegame : MonoBehaviour
             {
                 ToggleButtons();
                 var res = Minimax(Board, AiDifficulty, Int32.MinValue, Int32.MaxValue, true);
-                if (IsValidLocation(Board, res.Item1))
+                if (res.Item1 != null && IsValidLocation(Board, res.Item1))
                 {
                     notyet = true;
                     switch (res.Item1)
@@ -1248,7 +1248,7 @@ public class Thegame : MonoBehaviour
 
     public void PussyAss()
     {
-        AiDifficulty = 2;
+        AiDifficulty = 3;
         aienabled = true;
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
@@ -1262,7 +1262,7 @@ public class Thegame : MonoBehaviour
 
     public void MediumAss()
     {
-        AiDifficulty = 3;
+        AiDifficulty = 4;
         aienabled = true;
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
