@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class HangManCode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Connect4Code : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private bool mouse_over = false;
     public GameObject descr;
