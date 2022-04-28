@@ -175,38 +175,19 @@ public class Thegame : MonoBehaviour
 
         if (blo.Count(c => piece == c) == 3 && blo.Count(c => Empty == c) == 1)
         {
-            score += 15;
+            score += 5;
         }
 
         if (blo.Count(c => piece == c) == 2 && blo.Count(c => Empty == c) == 2)
         {
-            score += 5;
-        }
-
-        if (blo.Count(c => piece == c) == 3 && blo.Count(c => Empty == c) == 1)
-        {
             score += 2;
-        }
-
-        if (blo.Count(c => opp_piece == c) == 4)
-        {
-            score -= 75;
         }
 
         if (blo.Count(c => opp_piece == c) == 3 && blo.Count(c => Empty == c) == 1)
         {
-            score -= 10;
+            score -= 4;
         }
-
-        if (blo.Count(c => opp_piece == c) == 2 && blo.Count(c => Empty == c) == 2)
-        {
-            score -= 3;
-        }
-
-        if (blo.Count(c => opp_piece == c) == 1 && blo.Count(c => Empty == c) == 3)
-        {
-            score -= 1;
-        }
+        
 
         return score;
     }
@@ -569,7 +550,39 @@ public class Thegame : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Crash");
+                    var col = Random.Range(0, 7);
+                    while (!IsValidLocation(Board,col))
+                    {
+                        col = Random.Range(0, 7);
+                    }
+                    
+                    notyet = true;
+                    switch (col)
+                    {
+                        case 0:
+                            Invoke("DropCol0P2", 3);
+                            break;
+                        case 1:
+                            Invoke("DropCol1P2", 3);
+                            break;
+                        case 2:
+                            Invoke("DropCol2P2", 3);
+                            break;
+                        case 3:
+                            Invoke("DropCol3P2", 3);
+                            break;
+                        case 4:
+                            Invoke("DropCol4P2", 3);
+                            break;
+                        case 5:
+                            Invoke("DropCol5P2", 3);
+                            break;
+                        case 6:
+                            Invoke("DropCol6P2", 3);
+                            break;
+                    }
+
+                    Invoke("ToggleButtons", 6);
                 }
             }
         }
@@ -1199,7 +1212,6 @@ public class Thegame : MonoBehaviour
         }
 
         int row = GetNextOpenRow(Board, 5);
-        Debug.Log(row);
         var spawn = new Vector3((float) 277.75, 25, 120);
         if (row != 5)
         {
@@ -1237,7 +1249,7 @@ public class Thegame : MonoBehaviour
     public void PussyAss()
     {
         AiDifficulty = 2;
-        
+        aienabled = true;
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
         DifficultyCanvas.gameObject.SetActive(false);
@@ -1251,7 +1263,7 @@ public class Thegame : MonoBehaviour
     public void MediumAss()
     {
         AiDifficulty = 3;
-        
+        aienabled = true;
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
         DifficultyCanvas.gameObject.SetActive(false);
@@ -1265,7 +1277,7 @@ public class Thegame : MonoBehaviour
     public void BadAss()
     {
         AiDifficulty = 5;
-        
+        aienabled = true;
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
         DifficultyCanvas.gameObject.SetActive(false);
@@ -1305,6 +1317,11 @@ public class Thegame : MonoBehaviour
         }
 
         isplayerturn = Random.Range(0,2) == 1;
+
+        if (!isplayerturn)
+        {
+            notyet = false;
+        }
         
         Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
         if (isplayerturn)
@@ -1316,6 +1333,14 @@ public class Thegame : MonoBehaviour
         {
             toChange.text = "Wait ...";
             toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
+        }
+
+        for (int col = 0; col < ColsCount; col++)
+        {
+            for (int row = 0; row < RowCount - 1; row++)
+            {
+                Plateau.transform.Find("support." + col + row).gameObject.SetActive(false);
+            }
         }
         
     }
