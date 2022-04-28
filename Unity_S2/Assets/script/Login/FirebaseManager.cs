@@ -61,9 +61,7 @@ namespace Data
             {
                 Destroy(this);
             }
-
-           
-				
+            
             
             //Check that all of the necessary dependencies for Firebase are present on the system
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
@@ -196,7 +194,7 @@ namespace Data
                 yield return new WaitForSeconds(2);
 
                 // usernameField.text = User.DisplayName;
-                SceneManager.LoadScene(0); // Change to user data UI
+                SceneManager.LoadScene(1); // Change to user data UI
                 confirmLoginText.text = "";
                 ClearLoginFeilds();
                 ClearRegisterFeilds();
@@ -274,7 +272,7 @@ namespace Data
                         {
                             //Username is now set
                             //Now return to login screen
-                            SceneManager.LoadScene(0);
+                            SceneManager.LoadScene(1);
                             warningRegisterText.text = "";
                             ClearRegisterFeilds();
                             ClearLoginFeilds();
