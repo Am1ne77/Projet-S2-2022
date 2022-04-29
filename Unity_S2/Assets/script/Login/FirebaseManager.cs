@@ -129,7 +129,7 @@ namespace Data
             StartCoroutine(UpdateUsernameAuth(usernameField));
             StartCoroutine(UpdateUsernameDatabase(usernameField));
 
-            StartCoroutine(UpdateXp(xpField+xpPendu+xpPuissance4+xpMiniTank));
+            StartCoroutine(UpdateXp(xpPendu+xpPuissance4+xpMiniTank));
             
             StartCoroutine(UpdateXpPendu(xpPendu));
             StartCoroutine(UpdateXpPuissance4(xpPuissance4));

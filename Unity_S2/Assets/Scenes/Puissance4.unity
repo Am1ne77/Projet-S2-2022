@@ -2761,7 +2761,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1728328844}
         m_TargetAssemblyTypeName: Thegame, Assembly-CSharp
-        m_MethodName: Exit
+        m_MethodName: PlayAgain
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3639,6 +3639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e28540a9baa6e4307b4058893aeb5d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Firebase: {fileID: 0}
   Pions1: {fileID: 4011143140853273513, guid: 4ccfaf3a9c65941f08ace8fc37386824, type: 3}
   Pions2: {fileID: 2561973884619251827, guid: a31692ea63f3c491183b1145f0d31897, type: 3}
   Plateau: {fileID: 1081007697}

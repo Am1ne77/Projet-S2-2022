@@ -7,10 +7,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+
+using Data;
+
+using UnityEngine.SceneManagement;
 
 public class Thegame : MonoBehaviour
 {
@@ -29,6 +32,8 @@ public class Thegame : MonoBehaviour
     private bool gamestarted;
     private int AiDifficulty;
     private int turn;
+    
+    public FirebaseManager Firebase;
     private Player[] listPlayer;
 
 
@@ -43,6 +48,7 @@ public class Thegame : MonoBehaviour
     public GameObject YouWonUi;
     public GameObject YouLostUi;
     public GameObject DrawUi;
+    
 
     //Initialise the board
     private char[][] CreateBoard()
@@ -444,6 +450,7 @@ public class Thegame : MonoBehaviour
 
     public void Start()
     {
+        Firebase = FirebaseManager.Instance;
         Board = setup();
         if (PhotonNetwork.IsConnected)
         {
@@ -497,6 +504,7 @@ public class Thegame : MonoBehaviour
 
                 if (Win(Board, Player1Piece))
                 {
+                    Firebase.xpPuissance4 += 100 * AiDifficulty;
                     YouWonUi.SetActive(true);
                 }
                 else
@@ -507,10 +515,11 @@ public class Thegame : MonoBehaviour
                     }
                     else
                     {
+                        Firebase.xpPuissance4 -= 100/AiDifficulty;
                         YouLostUi.SetActive(true);
                     }
                 }
-
+                
                 gamestarted = false;
             }
 
@@ -619,6 +628,7 @@ public class Thegame : MonoBehaviour
                     {
                         if (PhotonNetwork.IsMasterClient)
                         {
+                            
                             YouLostUi.SetActive(true);
                         }
                         else
@@ -1295,6 +1305,8 @@ public class Thegame : MonoBehaviour
     public void Exit()
     {
         
+        Firebase.SaveDataButton("Puissance4");
+        SceneManager.LoadScene(1);
     }
 
     public void PlayAgain()

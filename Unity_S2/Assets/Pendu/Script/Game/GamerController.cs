@@ -85,7 +85,7 @@ namespace Game
 
             if (nb_errors == 7)
             {
-                score -= word.Length * 100;
+                
                 this.gameObject.SetActive(false);
                 YouLost.SetActive(true);
                 Buttons.SetActive(true);
@@ -100,6 +100,7 @@ namespace Game
 
             if (completed)
             {
+
                 this.gameObject.SetActive(false);
                 YouWon.SetActive(true);
                 Buttons.SetActive(true);
@@ -167,7 +168,7 @@ namespace Game
                 if (complete == revealed.Length)
                 {
                     this.completed = true;
-                    this.score += revealed.Length +100 *complete;
+                    this.score += 100 *complete;
                 }
                 UpdateWorldIndicator();
                 updateIndicatorScore();
@@ -289,7 +290,7 @@ namespace Game
             Firebase.SaveDataButton("Pendu");
             // DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
            // WriteNewScore(DBreference.Child("users").Child(User.UserId).GetValueAsync(), score);
-            PhotonNetwork.LoadLevel(0);
+            PhotonNetwork.LoadLevel(1);
             PhotonNetwork.LeaveRoom();
             
         }
