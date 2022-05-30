@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,23 @@ public class Bullet : MonoBehaviour
     
     void Update()
     {
-        bullet.transform.Translate(new Vector3(0,0,1));
+        transform.Translate(new Vector3(0,0,(float) 0.3));
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+
+        if (collision.gameObject.CompareTag("Walls"))
+        {
+            if (bullet is null)
+            {
+                var body = GetComponent<Rigidbody>();
+                body.constraints = RigidbodyConstraints.FreezeAll;
+                Destroy(this);
+            }
+            
+        }
+
+    }
+    
 }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class Tank : MonoBehaviour
@@ -7,13 +9,20 @@ public class Tank : MonoBehaviour
     [SerializeField] 
     private GameObject bullet;
 
+    [SerializeField] 
+    private GameObject bulletManager;
+
+    private DateTime LastShot;
+    
+    
+
     void Start()
     {
+        LastShot = DateTime.Now;
     }
 
     void Update()
     {
-
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             transform.Translate(new Vector3(0,0,(float) 0.25));
@@ -36,9 +45,23 @@ public class Tank : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Shoot!");
-            var bull = gameObject.AddComponent<Bullet>();
-            bull.Shoot(bullet, transform.position, transform.rotation);
+            TimeSpan ready = DateTime.Now - LastShot;
+            if (ready.Seconds >= 3)
+            {
+                var bull = bulletManager.AddComponent<Bullet>();
+                bull.Shoot(bullet, transform.position, transform.rotation);
+                LastShot = DateTime.Now;
+            }
         }
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+        if (collision.gameObject.CompareTag("Walls"))
+        {
+            transform.Translate(new Vector3(0, 0, -2));
+        }
+
     }
 }
