@@ -6,21 +6,18 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private GameObject bullet;
-    public void Shoot(GameObject bulletGameObject, Vector3 pos, Quaternion rot)
-    {
-        var bul = Instantiate(bulletGameObject, pos, rot);
-        this.bullet = bul;
-    }
+
+    private Rigidbody _rigidbody;
     
     void Start()
     {
-        
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     
     void Update()
     {
-        transform.Translate(new Vector3(0,0,(float) 0.3));
+        transform.Translate(new Vector3(0,0,(float) 1));
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -30,13 +27,19 @@ public class Bullet : MonoBehaviour
         {
             if (bullet is null)
             {
-                var body = GetComponent<Rigidbody>();
-                body.constraints = RigidbodyConstraints.FreezeAll;
+                transform.Translate(new Vector3(0,-10,0));
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
                 Destroy(this);
             }
             
         }
 
+    }
+    
+    public void Shoot(GameObject bulletGameObject, Vector3 pos, Quaternion rot)
+    {
+        var bul = Instantiate(bulletGameObject, pos, rot);
+        this.bullet = bul;
     }
     
 }

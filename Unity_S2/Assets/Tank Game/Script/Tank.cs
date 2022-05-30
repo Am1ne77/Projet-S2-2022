@@ -13,24 +13,27 @@ public class Tank : MonoBehaviour
     private GameObject bulletManager;
 
     private DateTime LastShot;
+
+    private Rigidbody _rigidbody;
     
     
 
     void Start()
     {
         LastShot = DateTime.Now;
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
-            transform.Translate(new Vector3(0,0,(float) 0.25));
+            transform.Translate(new Vector3(0,0,(float) 0.2));
         }
         
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
-            transform.Translate(new Vector3(0,0,(float) -0.25));
+            transform.Translate(new Vector3(0,0,(float) -0.2));
         }
         
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -55,12 +58,13 @@ public class Tank : MonoBehaviour
         }
     }
     
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         
         if (collision.gameObject.CompareTag("Walls"))
         {
-            transform.Translate(new Vector3(0, 0, -2));
+            //transform.Translate(new Vector3(0, 0, -2));
+            //_rigidbody.velocity *= -1;
         }
 
     }
