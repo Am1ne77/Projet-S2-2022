@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Tank : MonoBehaviour
 {
-    
+    [SerializeField] 
+    private GameObject bullet;
+
     void Start()
     {
-        
     }
 
-    
     void Update()
     {
 
@@ -32,6 +32,13 @@ public class Tank : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             transform.Rotate(new Vector3(0,4,0), Space.Self);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Shoot!");
+            var bull = gameObject.AddComponent<Bullet>();
+            bull.Shoot(bullet, transform.position, transform.rotation);
         }
     }
 }
