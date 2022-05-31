@@ -14,14 +14,14 @@ public class Tank : MonoBehaviour
 
     private DateTime LastShot;
 
-    private Rigidbody _rigidbody;
+    private bool goingforward;
     
     
 
     void Start()
     {
         LastShot = DateTime.Now;
-        _rigidbody = GetComponent<Rigidbody>();
+        goingforward = false;
     }
 
     void Update()
@@ -29,11 +29,13 @@ public class Tank : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             transform.Translate(new Vector3(0,0,(float) 0.2));
+            goingforward = true;
         }
         
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             transform.Translate(new Vector3(0,0,(float) -0.2));
+            goingforward = false;
         }
         
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -58,13 +60,19 @@ public class Tank : MonoBehaviour
         }
     }
     
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         
         if (collision.gameObject.CompareTag("Walls"))
         {
-            //transform.Translate(new Vector3(0, 0, -2));
-            //_rigidbody.velocity *= -1;
+            if (goingforward)
+            {
+                transform.Translate(new Vector3(0, 0, -1));
+            }
+            else
+            {
+                transform.Translate(new Vector3(0, 0, 1));
+            }
         }
 
     }
