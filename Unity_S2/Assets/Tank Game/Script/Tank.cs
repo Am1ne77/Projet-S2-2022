@@ -56,7 +56,7 @@ public class Tank : MonoBehaviour
     
     #endregion
 
-    private int _currnbenn = 0;
+    private static int _currnbenemy = 0;
 
     void Start()
     {
@@ -93,18 +93,18 @@ public class Tank : MonoBehaviour
         tank2.Spawn(EnemyTankModel, _spawnpoints[index2], _spawnQuaternions[index2]);
         tank3.Spawn(EnemyTankModel, _spawnpoints[index3], _spawnQuaternions[index3]);
         
-        _currnbenn = 3;
+        _currnbenemy = 3;
     }
 
     void Update()
     {
-        if (_currnbenn < 3)
+        if (_currnbenemy < 3)
         {
             var r = new Random();
             int index = r.Next(0, _spawnpoints.Length);
             var tank = EnemyTankManager.AddComponent<EnemyTank>();
             tank.Spawn(EnemyTankModel, _spawnpoints[index], _spawnQuaternions[index]);
-            _currnbenn++;
+            _currnbenemy++;
         }
         
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
@@ -157,5 +157,10 @@ public class Tank : MonoBehaviour
             }
         }
 
+    }
+
+    public static void TankDestroyed()
+    {
+        _currnbenemy--;
     }
 }

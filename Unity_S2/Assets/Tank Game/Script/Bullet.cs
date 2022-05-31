@@ -28,6 +28,7 @@ public class Bullet : MonoBehaviour
             Destroy(collision.gameObject.gameObject);
             Destroy(this);
             Destroy(this.gameObject);
+            Tank.TankDestroyed();
         }
 
     }
