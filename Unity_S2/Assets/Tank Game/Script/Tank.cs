@@ -26,8 +26,7 @@ public class Tank : MonoBehaviour
     private GameObject EnemyTankManager;
 
     private DateTime LastShot;
-
-    private bool goingforward;
+    
 
     #region Spawns
     
@@ -62,9 +61,6 @@ public class Tank : MonoBehaviour
     {
         //Shooting timer
         LastShot = DateTime.Now;
-        
-        //collision fix
-        goingforward = false;
         
         //start
         StartWall1.SetActive(false);
@@ -110,13 +106,11 @@ public class Tank : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             transform.Translate(new Vector3(0,0,(float) 0.2));
-            goingforward = true;
         }
         
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             transform.Translate(new Vector3(0,0,(float) -0.2));
-            goingforward = false;
         }
         
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -142,21 +136,13 @@ public class Tank : MonoBehaviour
         }
     }
     
-    private void OnCollisionEnter(Collision collision)
-    {
-        
-        if (collision.gameObject.CompareTag("Walls"))
-        {
-            if (goingforward)
-            {
-                transform.Translate(new Vector3(0, 0, -1));
-            }
-            else
-            {
-                transform.Translate(new Vector3(0, 0, 1));
-            }
-        }
 
+    private void OnCollisionStay(Collision collisionInfo)
+    {
+        if (collisionInfo.gameObject.CompareTag("Walls"))
+        {
+            transform.Rotate(new Vector3(0, 4, 0), Space.Self);
+        }
     }
 
     public static void TankDestroyed()
