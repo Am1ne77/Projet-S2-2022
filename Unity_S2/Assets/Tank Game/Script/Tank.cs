@@ -11,10 +11,18 @@ public class Tank : MonoBehaviour
 
     [SerializeField] 
     private GameObject bulletManager;
+    
+    [SerializeField] 
+    private GameObject StartWall1;
+
+    [SerializeField] 
+    private GameObject StartWall2;
 
     private DateTime LastShot;
 
     private bool goingforward;
+    
+    
     
     
 
@@ -22,6 +30,8 @@ public class Tank : MonoBehaviour
     {
         LastShot = DateTime.Now;
         goingforward = false;
+        StartWall1.SetActive(false);
+        StartWall2.SetActive(false);
     }
 
     void Update()

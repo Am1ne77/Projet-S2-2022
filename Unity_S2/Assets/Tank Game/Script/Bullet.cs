@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-
     void Start()
     {
     }
@@ -21,6 +20,12 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Walls"))
         {
+            Destroy(this);
+            Destroy(this.gameObject);
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(collision.gameObject.gameObject);
             Destroy(this);
             Destroy(this.gameObject);
         }
