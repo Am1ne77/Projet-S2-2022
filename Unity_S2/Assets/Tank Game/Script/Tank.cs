@@ -56,6 +56,7 @@ public class Tank : MonoBehaviour
                 var bull = bulletManager.AddComponent<Bullet>();
                 bull.Shoot(bullet, transform.position, transform.rotation);
                 LastShot = DateTime.Now;
+                Destroy(bulletManager.GetComponent<Bullet>());
             }
         }
     }

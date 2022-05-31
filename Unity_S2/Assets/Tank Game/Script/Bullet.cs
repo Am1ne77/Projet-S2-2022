@@ -5,13 +5,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private GameObject bullet;
 
-    private Rigidbody _rigidbody;
-    
     void Start()
     {
-        _rigidbody = GetComponent<Rigidbody>();
     }
 
     
@@ -25,21 +21,15 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Walls"))
         {
-            if (bullet is null)
-            {
-                transform.Translate(new Vector3(0,-10,0));
-                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-                Destroy(this);
-            }
-            
+            Destroy(this);
+            Destroy(this.gameObject);
         }
 
     }
     
     public void Shoot(GameObject bulletGameObject, Vector3 pos, Quaternion rot)
     {
-        var bul = Instantiate(bulletGameObject, pos, rot);
-        this.bullet = bul;
+        Instantiate(bulletGameObject, pos, rot);
     }
     
 }
