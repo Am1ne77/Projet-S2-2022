@@ -10,11 +10,7 @@ public class Detection : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            //Debug.Log("Found");
             EnemyTank.FoundU(other.transform);
-            //Debug.Log("x: " + other.transform.position.x);
-            //Debug.Log("y: " + other.transform.position.y);
-            //Debug.Log("z: " + other.transform.position.z);
         }
     }
 }

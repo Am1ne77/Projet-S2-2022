@@ -5,37 +5,40 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    void Start()
-    {
-    }
+    private DateTime Shot = DateTime.Now;
 
+    private GameObject bullet;
     
     void Update()
     {
-        transform.Translate(new Vector3(0,0,(float) 1));
+        transform.Translate(new Vector3(0,0,(float) 0.4f));
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        
+        if (collision.gameObject.CompareTag("Enemy") && (DateTime.Now - Shot).Milliseconds > 100)
+        {
+            Destroy(collision.gameObject);
+            //Destroy(bullet);
+            Destroy(this);
+            Destroy(this.gameObject);
+            //Tank.TankDestroyed();
+        }
 
         if (collision.gameObject.CompareTag("Walls"))
         {
+            //Destroy(bullet);
             Destroy(this);
             Destroy(this.gameObject);
         }
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Destroy(collision.gameObject.gameObject);
-            Destroy(this);
-            Destroy(this.gameObject);
-            Tank.TankDestroyed();
-        }
-
+        
     }
-    
+
     public void Shoot(GameObject bulletGameObject, Vector3 pos, Quaternion rot)
     {
-        Instantiate(bulletGameObject, pos, rot);
+        bullet = Instantiate(bulletGameObject, pos, rot);
+        Shot = DateTime.Now;
     }
-    
+
 }

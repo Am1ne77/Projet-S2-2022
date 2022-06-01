@@ -7,57 +7,55 @@ using Random = System.Random;
 
 public class EnemyTank : MonoBehaviour
 {
-
-    private bool tryleft;
-
-    private DateTime LastCol;
-
-    private static Transform target;
     
+    private static Transform target;
 
-    public void Spawn(GameObject bulletGameObject, Vector3 pos, Quaternion rot)
+    private DateTime LastShot;
+
+    [HideInInspector]
+    public GameObject bulletManager;
+
+    [HideInInspector]
+    public GameObject bullet;
+
+    private GameObject tank;
+
+    public void Spawn(GameObject tankGameObject, Vector3 pos, Quaternion rot, 
+        GameObject bulletManagerGameObject, GameObject bulletGameObject)
     {
-        Instantiate(bulletGameObject, pos, rot);
-        Random r = new Random();
-        tryleft = r.Next(0, 2) == 0;
-        LastCol = DateTime.Now;
+        tank = Instantiate(tankGameObject, pos, rot);
+        LastShot = DateTime.Now;
+        this.bulletManager = bulletManagerGameObject;
+        this.bullet = bulletGameObject;
     }
     
     void Update()
     {
-        TimeSpan swi = DateTime.Now - LastCol;
-        if (swi.Seconds >= 2)
-        {
-            tryleft = !tryleft;
-        }
+        
         transform.LookAt(target);
-        //transform.Translate(new Vector3(0,0,(float) 0.13));
+        transform.Translate(new Vector3(0,0,(float) 0.1));
+        
+        TimeSpan ready = DateTime.Now - LastShot;
+        if (ready.Seconds >= 3 && bullet != null)
+        {
+            LastShot = DateTime.Now;
+            var bull = bulletManager.AddComponent<Bullet>();
+            bull.Shoot(bullet, this.tank.transform.position, this.tank.transform.rotation);
+            Destroy(bulletManager.GetComponent<Bullet>());
+        }
         
     }
-    
+
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Walls") || collision.gameObject.CompareTag("Enemy"))
         {
-            if (tryleft)
-            {
-                transform.Rotate(new Vector3(0,-4,0), Space.Self);
-            }
-            else
-            {
-                transform.Rotate(new Vector3(0,4,0), Space.Self);
-            }
-            
-            LastCol = DateTime.Now;
+            transform.Rotate(new Vector3(0,-4,0), Space.Self);
         }
     }
 
     public static void FoundU(Transform transform)
     {
-        //Debug.Log("Look");
         target = transform;
-        //Debug.Log("x: " + other.transform.position.x);
-        //Debug.Log("y: " + other.transform.position.y);
-        //Debug.Log("z: " + other.transform.position.z);
     }
 }

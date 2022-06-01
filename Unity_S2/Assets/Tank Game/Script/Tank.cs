@@ -84,10 +84,10 @@ public class Tank : MonoBehaviour
         var tank1 = EnemyTankManager.AddComponent<EnemyTank>();
         var tank2 = EnemyTankManager.AddComponent<EnemyTank>();
         var tank3 = EnemyTankManager.AddComponent<EnemyTank>();
-        
-        tank1.Spawn(EnemyTankModel, _spawnpoints[index1], _spawnQuaternions[index1]);
-        tank2.Spawn(EnemyTankModel, _spawnpoints[index2], _spawnQuaternions[index2]);
-        tank3.Spawn(EnemyTankModel, _spawnpoints[index3], _spawnQuaternions[index3]);
+
+        tank1.Spawn(EnemyTankModel, _spawnpoints[index1], _spawnQuaternions[index1], bulletManager, bullet);
+        tank2.Spawn(EnemyTankModel, _spawnpoints[index2], _spawnQuaternions[index2], bulletManager, bullet);
+        tank3.Spawn(EnemyTankModel, _spawnpoints[index3], _spawnQuaternions[index3], bulletManager, bullet);
         
         _currnbenemy = 3;
     }
@@ -99,7 +99,7 @@ public class Tank : MonoBehaviour
             var r = new Random();
             int index = r.Next(0, _spawnpoints.Length);
             var tank = EnemyTankManager.AddComponent<EnemyTank>();
-            tank.Spawn(EnemyTankModel, _spawnpoints[index], _spawnQuaternions[index]);
+            tank.Spawn(EnemyTankModel, _spawnpoints[index], _spawnQuaternions[index], bulletManager, bullet);
             _currnbenemy++;
         }
         
