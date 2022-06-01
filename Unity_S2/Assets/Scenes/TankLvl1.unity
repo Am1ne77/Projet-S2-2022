@@ -1311,7 +1311,7 @@ GameObject:
   - component: {fileID: 712840256}
   m_Layer: 0
   m_Name: TestTank
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1332,7 +1332,7 @@ MonoBehaviour:
   bulletManager: {fileID: 1127276679}
   StartWall1: {fileID: 581502875}
   StartWall2: {fileID: 1928976598}
-  EnemyTankModel: {fileID: 1530961829646800583, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+  EnemyTankModel: {fileID: 4692676335591967865, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
   EnemyTankManager: {fileID: 103656269}
 --- !u!54 &712840257
 Rigidbody:
@@ -3874,6 +3874,67 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146350629}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &4692676336524599085
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 106.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 48.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967863, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967865, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_Name
+      value: EnemyTestTank
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692676335591967865, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf4e6c02295394c659b34da1a11dcc8a, type: 3}
 --- !u!1001 &5991842834665620709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3884,6 +3945,10 @@ PrefabInstance:
     - target: {fileID: 5991842833714282377, guid: c053da077579a447f84a06b508f8a6ef, type: 3}
       propertyPath: m_Name
       value: TestTank
+      objectReference: {fileID: 0}
+    - target: {fileID: 5991842833714282377, guid: c053da077579a447f84a06b508f8a6ef, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5991842833714282388, guid: c053da077579a447f84a06b508f8a6ef, type: 3}
       propertyPath: m_RootOrder
