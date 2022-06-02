@@ -11,37 +11,25 @@ public class EnemyTank : MonoBehaviour
     private static Transform target;
 
     private DateTime LastShot;
-
-    [HideInInspector]
-    public GameObject bulletManager;
-
+    
     [HideInInspector]
     public GameObject bullet;
-
-    private GameObject tank;
-
-    public void Spawn(GameObject tankGameObject, Vector3 pos, Quaternion rot, 
-        GameObject bulletManagerGameObject, GameObject bulletGameObject)
+    
+    public void Awake()
     {
-        tank = Instantiate(tankGameObject, pos, rot);
         LastShot = DateTime.Now;
-        this.bulletManager = bulletManagerGameObject;
-        this.bullet = bulletGameObject;
     }
     
     void Update()
     {
-        
         transform.LookAt(target);
-        transform.Translate(new Vector3(0,0,(float) 0.1));
+        transform.Translate(new Vector3(0,0,(float) 0.01));
         
         TimeSpan ready = DateTime.Now - LastShot;
-        if (ready.Seconds >= 3 && bullet != null)
+        if (ready.Seconds >= 3)
         {
+            var bull = Instantiate(bullet, this.gameObject.transform.position, this.gameObject.transform.rotation);
             LastShot = DateTime.Now;
-            var bull = bulletManager.AddComponent<Bullet>();
-            bull.Shoot(bullet, this.tank.transform.position, this.tank.transform.rotation);
-            Destroy(bulletManager.GetComponent<Bullet>());
         }
         
     }
@@ -52,10 +40,17 @@ public class EnemyTank : MonoBehaviour
         {
             transform.Rotate(new Vector3(0,-4,0), Space.Self);
         }
+
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(this);
+            Destroy(this.gameObject);
+        }
     }
 
     public static void FoundU(Transform transform)
     {
         target = transform;
     }
+    
 }

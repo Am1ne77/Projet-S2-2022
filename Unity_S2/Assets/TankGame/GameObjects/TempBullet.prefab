@@ -13,9 +13,6 @@ GameObject:
   - component: {fileID: 8027563244994284423}
   - component: {fileID: 7092150743603723410}
   - component: {fileID: 691597859046943703}
-  - component: {fileID: 8831661910706561018}
-  - component: {fileID: 7029864160515434333}
-  - component: {fileID: 337659363545857125}
   - component: {fileID: -8668685911874067490}
   m_Layer: 0
   m_Name: TempBullet
@@ -117,42 +114,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &8831661910706561018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8224918159793201469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a78ce6241e2f440fea13a3aa6eda6f46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7029864160515434333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8224918159793201469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a78ce6241e2f440fea13a3aa6eda6f46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &337659363545857125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8224918159793201469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a78ce6241e2f440fea13a3aa6eda6f46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-8668685911874067490
 MonoBehaviour:
   m_ObjectHideFlags: 0
