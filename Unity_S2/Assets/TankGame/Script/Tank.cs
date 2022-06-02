@@ -23,7 +23,7 @@ public class Tank : MonoBehaviour
 
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
-            transform.Translate(new Vector3(0,0,(float) 0.2));
+            transform.Translate(new Vector3(0,0,(float) 0.3));
         }
         
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))

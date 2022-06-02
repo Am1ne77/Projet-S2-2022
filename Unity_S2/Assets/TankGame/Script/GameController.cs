@@ -87,9 +87,13 @@ public class GameController : MonoBehaviour
             var r = new Random();
             int index1 = r.Next(0, _spawnpoints.Length);
             var tank1 = Instantiate(EnemyTankModel, _spawnpoints[index1], _spawnQuaternions[index1]);
-            tank1.AddComponent<EnemyTank>();
             tank1.GetComponent<EnemyTank>().bullet = BulletModel;
             _currnbenemy++;
         }
+    }
+
+    public static void EnemyDestroyed()
+    {
+        _currnbenemy--;
     }
 }

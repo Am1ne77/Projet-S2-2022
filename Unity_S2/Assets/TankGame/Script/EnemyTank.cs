@@ -23,7 +23,7 @@ public class EnemyTank : MonoBehaviour
     void Update()
     {
         transform.LookAt(target);
-        transform.Translate(new Vector3(0,0,(float) 0.01));
+        transform.Translate(new Vector3(0,0,(float) 0.15));
         
         TimeSpan ready = DateTime.Now - LastShot;
         if (ready.Seconds >= 3)
@@ -41,10 +41,11 @@ public class EnemyTank : MonoBehaviour
             transform.Rotate(new Vector3(0,-4,0), Space.Self);
         }
 
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Bullet") && (DateTime.Now - LastShot).Milliseconds > 50)
         {
             Destroy(this);
             Destroy(this.gameObject);
+            GameController.EnemyDestroyed();
         }
     }
 

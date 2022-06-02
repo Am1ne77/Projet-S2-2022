@@ -14,7 +14,13 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(new Vector3(0,0,(float) 0.4f));
+        if (this.gameObject.transform.position.y > 4 || this.gameObject.transform.position.y < 0)
+        {
+            Destroy(this.gameObject);
+            Destroy(this);
+        }
+        
+        transform.Translate(new Vector3(0,0,(float) 2f));
     }
 
     private void OnCollisionEnter(Collision collision)
