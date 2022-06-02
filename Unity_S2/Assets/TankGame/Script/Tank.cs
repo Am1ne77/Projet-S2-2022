@@ -12,10 +12,13 @@ public class Tank : MonoBehaviour
 
     private DateTime LastShot;
 
+    private bool goingforward;
+
     void Awake()
     {
         //Shooting timer
         LastShot = DateTime.Now;
+        goingforward = true;
     }
 
     void Update()
@@ -24,11 +27,13 @@ public class Tank : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             transform.Translate(new Vector3(0,0,(float) 0.3));
+            goingforward = true;
         }
         
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             transform.Translate(new Vector3(0,0,(float) -0.2));
+            goingforward = false;
         }
         
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -58,8 +63,19 @@ public class Tank : MonoBehaviour
     {
         if (collisionInfo.gameObject.CompareTag("Walls"))
         {
+            if (goingforward)
+            {
+                transform.Translate(new Vector3(0, 0, -2));
+            }
+            else
+            {
+                transform.Translate(new Vector3(0, 0, 2));
+            }
+        }
+
+        if (collisionInfo.gameObject.CompareTag("Enemy"))
+        {
             transform.Translate(new Vector3(0, 0, -2));
-            //transform.Rotate(new Vector3(0, 4, 0), Space.Self);
         }
     }
     

@@ -36,9 +36,14 @@ public class EnemyTank : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Walls") || collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Walls")|| collision.gameObject.CompareTag("Enemy"))
         {
-            transform.Rotate(new Vector3(0,-4,0), Space.Self);
+            transform.Rotate(new Vector3(0,-5,0), Space.Self);
+        }
+        
+        if (collision.gameObject.CompareTag("Player") )
+        {
+            transform.Translate(new Vector3(0, 0, -3));
         }
 
         if (collision.gameObject.CompareTag("Bullet") && (DateTime.Now - LastShot).Milliseconds > 50)
