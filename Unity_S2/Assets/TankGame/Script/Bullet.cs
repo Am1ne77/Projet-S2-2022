@@ -17,18 +17,29 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
+        //Destroys the bullet if somehow it went over the wall
         if (this.gameObject.transform.position.y > 4 || this.gameObject.transform.position.y < 0)
         {
             Destroy(this.gameObject);
             Destroy(this);
         }
         
+        //Moves the bullet
         _rigidbody.AddForce(transform.forward * 200);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Walls"))
+        //Bullet gets destroyed on wall
+        if (collision.gameObject.CompareTag("Walls") || collision.gameObject.CompareTag("VerticalWall")
+            || collision.gameObject.CompareTag("HorizontalWall"))
+        {
+            Destroy(this.gameObject);
+            Destroy(this);
+        }
+
+        //Temp
+        if (collision.gameObject.CompareTag("Player"))
         {
             Destroy(this.gameObject);
             Destroy(this);

@@ -82,6 +82,7 @@ public class GameController : MonoBehaviour
     
     void Update()
     {
+        //Respawn enemy
         if (_currnbenemy < 3)
         {
             var r = new Random();
@@ -94,6 +95,7 @@ public class GameController : MonoBehaviour
 
     public static void EnemyDestroyed()
     {
+        //Updates the current number of enemies alive
         _currnbenemy--;
     }
 }
