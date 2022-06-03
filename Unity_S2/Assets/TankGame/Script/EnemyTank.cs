@@ -14,14 +14,23 @@ public class EnemyTank : MonoBehaviour
     
     [HideInInspector]
     public GameObject bullet;
+
+    private static DateTime LastTimeSeen;
     
     public void Awake()
     {
         LastShot = DateTime.Now;
+        LastTimeSeen = DateTime.Now;
     }
     
     void Update()
     {
+        if ((DateTime.Now - LastTimeSeen).Seconds > 1)
+        {
+            Destroy(this.gameObject);
+            Destroy(this);
+        }
+
         transform.LookAt(target);
         transform.Translate(new Vector3(0,0,(float) 0.15));
         
@@ -57,6 +66,7 @@ public class EnemyTank : MonoBehaviour
     public static void FoundU(Transform transform)
     {
         target = transform;
+        LastTimeSeen = DateTime.Now;
     }
     
 }

@@ -7,9 +7,12 @@ public class Bullet : MonoBehaviour
 {
     private DateTime Shot = DateTime.Now;
 
+    private Rigidbody _rigidbody;
+
     private void Start()
     {
         gameObject.tag = "Bullet";
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -20,7 +23,7 @@ public class Bullet : MonoBehaviour
             Destroy(this);
         }
         
-        transform.Translate(new Vector3(0,0,(float) 2f));
+        _rigidbody.AddForce(transform.forward * 200);
     }
 
     private void OnCollisionEnter(Collision collision)

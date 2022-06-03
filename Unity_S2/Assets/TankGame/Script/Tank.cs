@@ -11,39 +11,42 @@ public class Tank : MonoBehaviour
     public GameObject bullet;
 
     private DateTime LastShot;
+    
+    private Rigidbody _rigidbody;
 
-    private bool goingforward;
+    private Transform ShootPoint;
 
     void Awake()
     {
         //Shooting timer
         LastShot = DateTime.Now;
-        goingforward = true;
+        _rigidbody = GetComponent<Rigidbody>();
+        ShootPoint = this.gameObject.transform.Find("ShootPoint");
     }
 
     void Update()
     {
+        IsOutOfBounds();
 
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
-            transform.Translate(new Vector3(0,0,(float) 0.3));
-            goingforward = true;
+            //transform.Translate(new Vector3(0,0,(float) 0.3));
+            _rigidbody.AddForce(transform.forward * 20);
         }
         
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
-            transform.Translate(new Vector3(0,0,(float) -0.2));
-            goingforward = false;
+            _rigidbody.AddForce(- transform.forward * 20);
         }
         
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(new Vector3(0,-4,0), Space.Self);
+            _rigidbody.angularVelocity = new Vector3(0, -4, 0);
         }
         
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(new Vector3(0,4,0), Space.Self);
+            _rigidbody.angularVelocity = new Vector3(0, 4, 0);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -51,7 +54,7 @@ public class Tank : MonoBehaviour
             TimeSpan ready = DateTime.Now - LastShot;
             if (ready.Seconds >= 3)
             {
-                var bull = Instantiate(bullet, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                var bull = Instantiate(bullet, ShootPoint.position, this.gameObject.transform.rotation);
                 LastShot = DateTime.Now;
             }
            
@@ -59,7 +62,7 @@ public class Tank : MonoBehaviour
     }
     
 
-    private void OnCollisionStay(Collision collisionInfo)
+    /*private void OnCollisionEnter(Collision collisionInfo)
     {
         if (collisionInfo.gameObject.CompareTag("Walls"))
         {
@@ -76,6 +79,17 @@ public class Tank : MonoBehaviour
         if (collisionInfo.gameObject.CompareTag("Enemy"))
         {
             transform.Translate(new Vector3(0, 0, -2));
+        }
+    }*/
+
+    private void IsOutOfBounds()
+    {
+        if (this.transform.position.x > 133 || this.transform.position.x < 62
+            || this.transform.position.y < 0
+            || this.transform.position.z > 112 || this.transform.position.z < 25)
+        {
+            Destroy(this.gameObject);
+            Destroy(this);
         }
     }
     
