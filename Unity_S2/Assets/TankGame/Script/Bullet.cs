@@ -32,7 +32,7 @@ public class Bullet : MonoBehaviour
     {
         //Bullet gets destroyed on wall
         if (collision.gameObject.CompareTag("Walls") || collision.gameObject.CompareTag("VerticalWall")
-            || collision.gameObject.CompareTag("HorizontalWall"))
+            || collision.gameObject.CompareTag("HorizontalWall") || collision.gameObject.CompareTag("Bullet"))
         {
             Destroy(this.gameObject);
             Destroy(this);

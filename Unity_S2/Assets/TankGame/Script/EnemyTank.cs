@@ -54,9 +54,8 @@ public class EnemyTank : MonoBehaviour
 
         //Ai looks towards and player and moves
         transform.LookAt(target);
-        if (Vector3.Distance(_rigidbody.position, target.transform.position) > 10)
+        if (Vector3.Distance(_rigidbody.position, target.transform.position) > 15)
         {
-            Debug.Log(1);
             _rigidbody.AddForce(transform.forward * 15);
         }
         
@@ -83,7 +82,7 @@ public class EnemyTank : MonoBehaviour
         }
 
         //Gets destroyed by the player if his speed is greater
-        if (collision.gameObject.CompareTag("Player") && collision.rigidbody.velocity.magnitude > _rigidbody.velocity.magnitude)
+        if (collision.gameObject.CompareTag("Player") && collision.rigidbody.velocity.magnitude >  _rigidbody.velocity.magnitude)
         {
             Destroy(this);
             Destroy(this.gameObject);
@@ -105,6 +104,11 @@ public class EnemyTank : MonoBehaviour
             _rigidbody.AddForce(- transform.forward * 75);
         }
         
+        //Deactivate the Ai helper
+        if (collision.gameObject.CompareTag("Walls"))
+        {
+            LastCollision = DateTime.MinValue;
+        }
         
         
         //Help Ai in case stuck in wall

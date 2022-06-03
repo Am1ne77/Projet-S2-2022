@@ -40,7 +40,7 @@ public class Tank : MonoBehaviour
         //Backward
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
-            _rigidbody.AddForce(- transform.forward * 20);
+            _rigidbody.AddForce(transform.forward * -20);
         }
         
         //Left
