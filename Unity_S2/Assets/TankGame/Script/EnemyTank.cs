@@ -17,10 +17,16 @@ public class EnemyTank : MonoBehaviour
 
     private static DateTime LastTimeSeen;
     
+    private Rigidbody _rigidbody;
+    
+    private Transform ShootPoint;
+    
     public void Awake()
     {
         LastShot = DateTime.Now;
         LastTimeSeen = DateTime.Now;
+        _rigidbody = GetComponent<Rigidbody>();
+        ShootPoint = this.gameObject.transform.Find("ShootPoint");
     }
     
     void Update()
@@ -32,34 +38,29 @@ public class EnemyTank : MonoBehaviour
         }
 
         transform.LookAt(target);
-        transform.Translate(new Vector3(0,0,(float) 0.15));
+        _rigidbody.AddForce(transform.forward * 15);
         
         TimeSpan ready = DateTime.Now - LastShot;
         if (ready.Seconds >= 3)
         {
-            var bull = Instantiate(bullet, this.gameObject.transform.position, this.gameObject.transform.rotation);
+            var bull = Instantiate(bullet, ShootPoint.position, this.gameObject.transform.rotation);
             LastShot = DateTime.Now;
         }
         
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Walls")|| collision.gameObject.CompareTag("Enemy"))
-        {
-            transform.Rotate(new Vector3(0,-5,0), Space.Self);
-        }
-        
-        if (collision.gameObject.CompareTag("Player") )
-        {
-            transform.Translate(new Vector3(0, 0, -3));
-        }
-
-        if (collision.gameObject.CompareTag("Bullet") && (DateTime.Now - LastShot).Milliseconds > 50)
+        if ((collision.gameObject.CompareTag("Bullet") && (DateTime.Now - LastShot).Milliseconds > 50) 
+            || collision.gameObject.CompareTag("Player"))
         {
             Destroy(this);
             Destroy(this.gameObject);
             GameController.EnemyDestroyed();
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            _rigidbody.AddForce(- transform.forward * 75);
         }
     }
 

@@ -67,7 +67,7 @@ public class GameController : MonoBehaviour
             index3 = r.Next(0, nbspawns);
         }
         
-        /*
+        
         var tank1 = Instantiate(EnemyTankModel, _spawnpoints[index1], _spawnQuaternions[index1]);
         tank1.GetComponent<EnemyTank>().bullet = BulletModel;
         
@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour
         tank2.GetComponent<EnemyTank>().bullet = BulletModel;
         
         var tank3 = Instantiate(EnemyTankModel, _spawnpoints[index3], _spawnQuaternions[index3]);
-        tank3.GetComponent<EnemyTank>().bullet = BulletModel;*/
+        tank3.GetComponent<EnemyTank>().bullet = BulletModel;
 
         _currnbenemy = 3;
     }

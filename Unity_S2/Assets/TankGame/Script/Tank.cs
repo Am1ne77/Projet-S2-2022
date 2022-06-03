@@ -31,7 +31,7 @@ public class Tank : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             //transform.Translate(new Vector3(0,0,(float) 0.3));
-            _rigidbody.AddForce(transform.forward * 20);
+            _rigidbody.AddForce(transform.forward * 250);
         }
         
         if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
@@ -62,25 +62,17 @@ public class Tank : MonoBehaviour
     }
     
 
-    /*private void OnCollisionEnter(Collision collisionInfo)
+    private void OnCollisionEnter(Collision collisionInfo)
     {
-        if (collisionInfo.gameObject.CompareTag("Walls"))
+        if (collisionInfo.gameObject.CompareTag("Bullet"))
         {
-            if (goingforward)
-            {
-                transform.Translate(new Vector3(0, 0, -2));
-            }
-            else
-            {
-                transform.Translate(new Vector3(0, 0, 2));
-            }
+            Debug.Log("Dead");
         }
-
         if (collisionInfo.gameObject.CompareTag("Enemy"))
         {
-            transform.Translate(new Vector3(0, 0, -2));
+            _rigidbody.AddForce(- transform.forward * 75);
         }
-    }*/
+    }
 
     private void IsOutOfBounds()
     {
