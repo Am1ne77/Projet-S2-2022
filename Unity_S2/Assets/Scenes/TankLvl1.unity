@@ -167,7 +167,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &27068870
 MeshRenderer:
@@ -262,7 +262,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &159519719
 MeshRenderer:
@@ -533,9 +533,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e31f616e2e04e059489c73d1346e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyTankModel: {fileID: 2420341444205411, guid: bbc4c786ab71e408799ae3e8b12581a1, type: 3}
-  PlayerModel: {fileID: 5053178440312671044, guid: a3809c4ed69e44387a8162a69524f230, type: 3}
-  BulletModel: {fileID: 8224918159793201469, guid: f9489068242ea4e08804cef5ee329a70, type: 3}
+  EnemyTankModel: {fileID: 2668674528016248634, guid: 02d89d0dfaa1a4ca18f8ecbab37eaf26, type: 3}
+  PlayerModel: {fileID: 4667211983809667589, guid: 5e090cd4de6a04a93adcd90f2c82d0aa, type: 3}
+  BulletModel: {fileID: 1515229128868889788, guid: be2d1647429574be98891f45c5cdd387, type: 3}
 --- !u!4 &322835542
 Transform:
   m_ObjectHideFlags: 0
@@ -544,7 +544,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 322835540}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 116.80147, y: 2.179517, z: 32.679783}
+  m_LocalPosition: {x: 144.6, y: 2.179517, z: 32.679783}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1260,7 +1260,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &678183299
 MeshRenderer:
@@ -1341,7 +1341,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &890253397
 MeshRenderer:
@@ -1450,7 +1450,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &934124126
 MeshRenderer:
@@ -1898,7 +1898,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1178067769
 MeshRenderer:
@@ -2358,7 +2358,7 @@ GameObject:
   - component: {fileID: 1483690743}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2478,7 +2478,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1632125694
 MeshRenderer:
@@ -2941,7 +2941,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1867985116
 MeshRenderer:
@@ -3244,7 +3244,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1964233338
 MeshRenderer:
@@ -3422,7 +3422,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &2004182072
 MeshRenderer:

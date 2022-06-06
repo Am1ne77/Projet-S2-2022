@@ -13,19 +13,23 @@ public class Bullet : MonoBehaviour
     {
         gameObject.tag = "Bullet";
         _rigidbody = GetComponent<Rigidbody>();
+        transform.Rotate(0,180,0,0);
     }
 
     void FixedUpdate()
     {
         //Destroys the bullet if somehow it went over the wall
-        if (this.gameObject.transform.position.y > 4 || this.gameObject.transform.position.y < 0)
+        if (this.gameObject.transform.position.y > 8 || this.gameObject.transform.position.y < 0)
         {
             Destroy(this.gameObject);
             Destroy(this);
         }
         
         //Moves the bullet
-        _rigidbody.AddForce(transform.forward * 200);
+        if (_rigidbody.velocity.magnitude < 60)
+        {
+            _rigidbody.AddForce(transform.forward * -200);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
