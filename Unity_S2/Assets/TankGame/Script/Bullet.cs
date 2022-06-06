@@ -42,13 +42,19 @@ public class Bullet : MonoBehaviour
             Destroy(this);
         }
 
-        //Temp
+        //Temp for Player
         if (collision.gameObject.CompareTag("Player"))
         {
             Destroy(this.gameObject);
             Destroy(this);
         }
-        
+
+        //Bullets collide
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(this.gameObject);
+            Destroy(this);
+        }
     }
 
     public void Awake()
