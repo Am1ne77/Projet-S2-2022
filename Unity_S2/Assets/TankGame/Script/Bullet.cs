@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Destroys the bullet if somehow it went over the wall
         if (this.gameObject.transform.position.y > 4 || this.gameObject.transform.position.y < 0)

@@ -80,7 +80,7 @@ public class GameController : MonoBehaviour
         _currnbenemy = 3;
     }
     
-    void Update()
+    void FixedUpdate()
     {
         //Respawn enemy
         if (_currnbenemy < 3)
