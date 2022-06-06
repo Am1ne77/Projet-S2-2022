@@ -46,13 +46,13 @@ public class Tank : MonoBehaviour
         //Left
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
-            _rigidbody.angularVelocity = new Vector3(0, -2, 0);
+            _rigidbody.angularVelocity = new Vector3(0, -4, 0);
         }
         
         //Right
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
-            _rigidbody.angularVelocity = new Vector3(0, 2, 0);
+            _rigidbody.angularVelocity = new Vector3(0, 4, 0);
         }
 
         //Shoot

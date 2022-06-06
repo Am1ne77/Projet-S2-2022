@@ -46,7 +46,7 @@ public class EnemyTank : MonoBehaviour
         //Help Ai if stuck in wall
         if ((DateTime.Now - LastCollision).Seconds <= 2)
         {
-            //_rigidbody.AddForce(transform.forward * 15);
+            _rigidbody.AddForce(transform.forward * 15);
             return;
         }
         
@@ -59,9 +59,9 @@ public class EnemyTank : MonoBehaviour
 
         //Ai looks towards and player and moves
         transform.LookAt(target);
-        if (Vector3.Distance(_rigidbody.position, target.transform.position) > 20)
+        if (Vector3.Distance(_rigidbody.position, target.transform.position) > 15)
         {
-            //_rigidbody.AddForce(transform.forward * 15);
+            _rigidbody.AddForce(transform.forward * 15);
         }
         
         
