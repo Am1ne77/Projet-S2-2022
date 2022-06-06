@@ -24,7 +24,7 @@ public class Tank : MonoBehaviour
         ShootPoint = this.gameObject.transform.Find("ShootPoint");
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //check if the player somehow got Out of Bounds
         IsOutOfBounds();

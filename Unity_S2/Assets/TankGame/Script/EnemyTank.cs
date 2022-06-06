@@ -36,8 +36,13 @@ public class EnemyTank : MonoBehaviour
         LastCollision = DateTime.MinValue;
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        if (target is null)
+        {
+            return;
+        }
+        
         //Help Ai if stuck in wall
         if ((DateTime.Now - LastCollision).Seconds <= 2)
         {
@@ -54,7 +59,7 @@ public class EnemyTank : MonoBehaviour
 
         //Ai looks towards and player and moves
         transform.LookAt(target);
-        if (Vector3.Distance(_rigidbody.position, target.transform.position) > 15)
+        if (Vector3.Distance(_rigidbody.position, target.transform.position) > 20)
         {
             _rigidbody.AddForce(transform.forward * 15);
         }
@@ -63,9 +68,9 @@ public class EnemyTank : MonoBehaviour
         
         //Ai shoot
         TimeSpan ready = DateTime.Now - LastShot;
-        if (ready.Seconds >= 3)
+        if (ready.Seconds >= 5)
         {
-            var bull = Instantiate(bullet, ShootPoint.position, this.gameObject.transform.rotation);
+            Instantiate(bullet, ShootPoint.position, this.gameObject.transform.rotation);
             LastShot = DateTime.Now;
         }
         
