@@ -535,7 +535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyTankModel: {fileID: 2668674528016248634, guid: 02d89d0dfaa1a4ca18f8ecbab37eaf26, type: 3}
   PlayerModel: {fileID: 4667211983809667589, guid: 5e090cd4de6a04a93adcd90f2c82d0aa, type: 3}
-  BulletModel: {fileID: 1515229128868889788, guid: be2d1647429574be98891f45c5cdd387, type: 3}
+  BulletModel: {fileID: 1303604470286874686, guid: d7131ddda01e2462888568407de457bc, type: 3}
 --- !u!4 &322835542
 Transform:
   m_ObjectHideFlags: 0
