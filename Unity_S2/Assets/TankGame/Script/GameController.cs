@@ -68,6 +68,28 @@ public class GameController : MonoBehaviour
         {
             PlayerSpawnLocation = new Vector3(120, 1.5f, 88);
             PlayerSpawnRotation = Quaternion.Euler(0, 180, 0);
+            
+            _spawnpoints = new[]
+            {
+                new Vector3(94,1.5f,83),
+                new Vector3(94,1.5f,99),
+                new Vector3(119,1.5f,104),
+                new Vector3(147,1.5f,97.6f),
+                new Vector3(147,1.5f,78),
+                new Vector3(131.5f,1.5f,73),
+                new Vector3(106,1.5f,73),
+            };
+
+            _spawnQuaternions = new[]
+            {
+                Quaternion.Euler(0, 90, 0),
+                Quaternion.Euler(0, 90, 0),
+                Quaternion.Euler(0, 180, 0),
+                Quaternion.Euler(0, -90, 0),
+                Quaternion.Euler(0, -90, 0),
+                Quaternion.Euler(0, 0, 0),
+                Quaternion.Euler(0, 0, 0),
+            };
         }
     }
     

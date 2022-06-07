@@ -99,9 +99,7 @@ public class Tank : MonoBehaviour
     private void IsOutOfBounds()
     {
         //Check if player is Out of Bounds to Destroy him
-        if (this.transform.position.x > 133 || this.transform.position.x < 62
-            || this.transform.position.y < 0
-            || this.transform.position.z > 112 || this.transform.position.z < 25)
+        if (this.transform.position.y < 0)
         {
             Destroy(this.gameObject);
             Destroy(this);
