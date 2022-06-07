@@ -1857,9 +1857,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e31f616e2e04e059489c73d1346e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyTankModel: {fileID: 2668674528016248634, guid: 02d89d0dfaa1a4ca18f8ecbab37eaf26, type: 3}
-  PlayerModel: {fileID: 4667211983809667589, guid: 5e090cd4de6a04a93adcd90f2c82d0aa, type: 3}
-  BulletModel: {fileID: 1303604470286874686, guid: d7131ddda01e2462888568407de457bc, type: 3}
+  EnemyTankModel: {fileID: 3128247869969079584, guid: 1bf027a20f08c40a98784a2b3ddc976b, type: 3}
+  PlayerModel: {fileID: 5035433616264222184, guid: 2bb5cfeebd3cb4aea8f19f63183820cc, type: 3}
+  BulletModel: {fileID: 6062655003043364306, guid: 9e366193188ad436996ccaced80c7d2b, type: 3}
   ShootSnd: {fileID: 901067630}
   EmptyMag: {fileID: 387555256}
   Killed: {fileID: 1893773612}
