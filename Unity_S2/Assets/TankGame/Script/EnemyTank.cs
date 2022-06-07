@@ -57,7 +57,7 @@ public class EnemyTank : MonoBehaviour
         }
         
         //Destroy tanks if the player is destroyed
-        if ((DateTime.Now - LastTimeSeen).Seconds > 0)
+        if ((DateTime.Now - LastTimeSeen).Seconds > 1)
         {
             Destroy(this.gameObject);
             Destroy(this);

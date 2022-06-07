@@ -104,7 +104,7 @@ public class GameController : MonoBehaviour
         player.GetComponent<Tank>().shootsnd = ShootSnd;
         player.GetComponent<Tank>().emptyMag = EmptyMag;
         player.GetComponent<Tank>().killed = Killed;
-        
+
         //spawn first 3 ennemmies
         int nbspawns = _spawnpoints.Length;
         var r = new Random();

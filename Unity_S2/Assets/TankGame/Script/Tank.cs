@@ -18,6 +18,8 @@ public class Tank : MonoBehaviour
     
     [HideInInspector] 
     public AudioSource killed;
+    
+    private ParticleSystem explosion;
 
     private DateTime LastShot;
     
@@ -27,6 +29,7 @@ public class Tank : MonoBehaviour
 
     void Awake()
     {
+        explosion = GetComponent<ParticleSystem>();
         //Shooting timer
         LastShot = DateTime.Now;
         _rigidbody = GetComponent<Rigidbody>();
@@ -90,9 +93,13 @@ public class Tank : MonoBehaviour
         if (collisionInfo.gameObject.CompareTag("Bullet"))
         {
             killed.Play();
+            this.gameObject.SetActive(false);
+            this.gameObject.GetComponent<ParticleSystem>().gameObject.SetActive(true);
+            explosion.Play();
+            Destroy(this.transform.GetChild(1).gameObject);
+            Destroy(this.gameObject,1);
             GameController.EndGame();
-            Destroy(this.gameObject); 
-            Destroy(this);
+            Destroy(this,1);
         }
     }
 
