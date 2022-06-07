@@ -33,6 +33,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
     private bool gamestarted;
     private int AiDifficulty;
     private int turn;//
+    private string support;
     
     public FirebaseManager Firebase;
     private Player[] listPlayer;
@@ -630,7 +631,6 @@ public class Thegame : MonoBehaviourPun, IPunObservable
             {
                 DisconnectedPlayer.SetActive(true); 
                 PhotonNetwork.LeaveRoom();
-                PhotonNetwork.Disconnect();
                 SceneManager.LoadScene(2);
                 return;
 
@@ -764,6 +764,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
             if (row != 5)
             {
                 Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+                support = "support.0" + row;
             }
 
             Instantiate(Pions1, spawn, transform.rotation);
@@ -804,7 +805,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
                 //photonView.RPC("Support",RpcTarget.All,'0',row);
                 Debug.Log(("active supp"));
                 
-                Plateau.transform.Find("support.0"+(row-1).ToString()).gameObject.SetActive(true);
+                Plateau.transform.Find("support.0"+row.ToString()).gameObject.SetActive(true);
             }
         
             PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
@@ -1489,6 +1490,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
                 }
                 a += '\n';
             }
+            //stream.SendNext(support);
             Debug.Log("send"+ a);
         }
         else if (stream.IsReading)
@@ -1506,14 +1508,14 @@ public class Thegame : MonoBehaviourPun, IPunObservable
                     if (a == (object) 1)
                     {
                         
-                        Support(i.ToString()[0],j.ToString()[0]);
+                        //Support(i.ToString()[0],j.ToString()[0]);
                         Board[i][j] = Player1Piece;
                         
                     }
                     else if (a == (object) 2)
                     {
                         
-                        Support(i.ToString()[0],j.ToString()[0]);
+                        //Support(i.ToString()[0],j.ToString()[0]);
                         Board[i][j] = Player2Piece;
                     }
                     else Board[i][j] = '.';
@@ -1523,6 +1525,8 @@ public class Thegame : MonoBehaviourPun, IPunObservable
 
             }
             Debug.Log("receive "+ b);
+            //support = (string) stream.ReceiveNext();
+            //if (support !=null)Plateau.transform.Find(support).gameObject.SetActive(true);
         }
         ToggleButtonsOnline();
         
@@ -1547,16 +1551,12 @@ public class Thegame : MonoBehaviourPun, IPunObservable
     public void ChangeGame()
     {
         PhotonNetwork.LoadLevel(3);
-        
-        PhotonNetwork.DestroyAll();
-        PhotonNetwork.Disconnect();
     }
 
     public void MainMenu()
     {
         Firebase.SignOutButton();
         PhotonNetwork.DestroyAll();
-        PhotonNetwork.Disconnect();
         SceneManager.LoadScene(1);
 
     }
