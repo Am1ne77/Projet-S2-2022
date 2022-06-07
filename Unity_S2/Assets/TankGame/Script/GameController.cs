@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 using System;
+using UnityEditor;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -31,6 +34,10 @@ public class GameController : MonoBehaviour
         new Quaternion(0, 180, 0, 0),
         new Quaternion(0, 45, 0, -45)
     };
+
+    private Vector3 PlayerSpawnLocation = new Vector3(100, 2.75f, 70);
+
+    private Quaternion PlayerSpawnRotation = Quaternion.Euler(0, 0, 0);
     
     #endregion
     
@@ -53,12 +60,24 @@ public class GameController : MonoBehaviour
     
     [SerializeField] 
     private AudioSource Killed;
-    
+
+
+    private void DetermineSpawnForScene()
+    {
+        if (SceneManager.GetActiveScene().name == "TankLvl2")
+        {
+            PlayerSpawnLocation = new Vector3(120, 1.5f, 88);
+            PlayerSpawnRotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
     
     void Start()
     {
+        //Determine the spawn location depending on the scene
+        DetermineSpawnForScene();
+
         //spawn player
-        var player = Instantiate(PlayerModel, new Vector3(100, 2.75f, 70), Quaternion.Euler(0, 0, 0));
+        var player = Instantiate(PlayerModel, PlayerSpawnLocation, PlayerSpawnRotation);
         player.GetComponent<Tank>().bullet = BulletModel;
         player.GetComponent<Tank>().shootsnd = ShootSnd;
         player.GetComponent<Tank>().emptyMag = EmptyMag;
