@@ -89,8 +89,10 @@ public class Tank : MonoBehaviour
         //Not implemented yet: the player is hit by bullet
         if (collisionInfo.gameObject.CompareTag("Bullet"))
         {
-            Debug.Log("Dead");
             killed.Play();
+            GameController.EndGame();
+            Destroy(this.gameObject); 
+            Destroy(this);
         }
     }
 

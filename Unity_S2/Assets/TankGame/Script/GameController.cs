@@ -113,6 +113,11 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public static void EndGame()
+    {
+        
+    }
+
     public static void EnemyDestroyed()
     {
         //Updates the current number of enemies alive
