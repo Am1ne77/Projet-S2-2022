@@ -1,15 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Data;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
     //Screen object variables
+    
     public GameObject loginUI;
     public GameObject registerUI;
+
+    public GameObject OptionsUI;
+
+    [Header("Settings")] 
+    
+    public GameObject UIprecedent;
+    public Button uninstall;
+
+    public Button close;
+
+    public Slider son;
     //public GameObject userDataUI;
         //public GameObject scoreboardUI;
 
@@ -21,6 +35,7 @@ public class UIManager : MonoBehaviour
         }
         else
             Destroy(this);
+        
        /* if (instance == null)
         {
             instance = this;
@@ -43,13 +58,29 @@ public class UIManager : MonoBehaviour
 
     public void LoginScreen() //Back button
     {
-        ClearScreen();
+        UIprecedent = loginUI;
+        
+        registerUI.SetActive(false);
+        
         loginUI.SetActive(true);
     }
     public void RegisterScreen() // Regester button
     {
-        ClearScreen();
+        UIprecedent = registerUI;
+        loginUI.SetActive(false);
         registerUI.SetActive(true);
+    }
+
+    public void SettingScreen()
+    {
+        UIprecedent.SetActive(false);
+        OptionsUI.SetActive(true);
+    }
+
+    public void SettingExit()
+    {
+        OptionsUI.SetActive(false);
+        UIprecedent.SetActive(true);
     }
 
    public void UserDataScreen() //Logged in
@@ -62,5 +93,11 @@ public class UIManager : MonoBehaviour
     {
     ClearScreen();
     //scoreboardUI.SetActive(true);
+    }
+
+    public void SliderControll()
+    {
+        var song = FirebaseManager.Instance.Audio;
+        song.volume = son.value;
     }
 }

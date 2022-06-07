@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="style.css">
 	
     <img src="ressources/background.jpg" rel="stylesheet" style="width:100%;height:55%;">
+    <style>
+   		/* Les descendants de rang pair sont stylés avec une autre couleur */
+
+		th { background-color : #557CBA; padding:0.7em; }
+    </style>
+
 </head>
 <body>
     
@@ -25,16 +31,29 @@
             
 			<li><a href="score.html">SCOREBOARD</a></li>
 		</ul>
-		</nav>
+	</nav>
+    <script type= "firebase.js" ></script>
+
 <center><table style="color: white; ">
+
+
+
+
+
+
+
+
+    <thread>
     <tr>
-        <td>Possition</td>
-        <td>UserName</td>
-        <td>Xp</td>
-        <td>XpPendu</td>
-        <td>XpPuissance4</td>
-        <td>XpMiniTanks</td>
+        <th>Position</th>
+        <th>UserName</th>
+        <th>Xp</th>
+        <th>XpPendu</th>
+        <th>XpPuissance4</th>
+        <th>XpMiniTanks</th>
     </tr>
+    </thread>
+    <tbody>
     <tr>
         <td>1</td>
         <td>krisboul</td>
@@ -75,6 +94,7 @@
         <td>300</td>
         <td>0</td>
     </tr>
+</tbody>
 </table></center>
 </h2>
 

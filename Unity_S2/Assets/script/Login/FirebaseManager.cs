@@ -18,6 +18,8 @@ namespace Data
 	public class FirebaseManager : MonoBehaviour
 	{
 		public static FirebaseManager Instance;
+
+        public AudioSource Audio;
         //Firebase variables
         [Header("Firebase")] public DependencyStatus dependencyStatus;
         public FirebaseAuth auth;
@@ -49,17 +51,18 @@ namespace Data
         /* public TMP_InputField killsField;
          public TMP_InputField deathsField;
          public Transform scoreboardContent;*/
-        public GameObject scoreElement;
+
 
         void Awake()
         {
-			if (FirebaseManager.Instance==null){
+			if (FirebaseManager.Instance==null)
+            {
 				FirebaseManager.Instance=this;
 				DontDestroyOnLoad(this);
 			}
             else
             {
-                Destroy(this);
+                SceneManager.LoadScene(1);
             }
             
             
@@ -485,5 +488,6 @@ namespace Data
             }
         }*/
 	}
+    
 }
 

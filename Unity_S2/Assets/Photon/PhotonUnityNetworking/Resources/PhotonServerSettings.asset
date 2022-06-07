@@ -40,6 +40,12 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_ChangeReadyState
+  - DropCol0
+  - DropPiece
+  - GetNextOpenRow
+  - ToggleButtonsOnline
+  - AddTurn
+  - Support
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
