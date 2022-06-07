@@ -10,6 +10,15 @@ public class Tank : MonoBehaviour
     [HideInInspector] 
     public GameObject bullet;
 
+    [HideInInspector] 
+    public AudioSource shootsnd;
+    
+    [HideInInspector] 
+    public AudioSource emptyMag;
+    
+    [HideInInspector] 
+    public AudioSource killed;
+
     private DateTime LastShot;
     
     private Rigidbody _rigidbody;
@@ -59,13 +68,18 @@ public class Tank : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             TimeSpan ready = DateTime.Now - LastShot;
-            if (ready.Seconds >= 3)
+            if (ready.Seconds >= 1)
             {
                 Instantiate(bullet, ShootPoint.position, this.gameObject.transform.rotation);
                 LastShot = DateTime.Now;
                 Debug.Log("Shoot");
+                shootsnd.Play();
             }
-           
+            else
+            {
+                emptyMag.Play();
+            }
+
         }
     }
     
@@ -76,6 +90,7 @@ public class Tank : MonoBehaviour
         if (collisionInfo.gameObject.CompareTag("Bullet"))
         {
             Debug.Log("Dead");
+            killed.Play();
         }
     }
 

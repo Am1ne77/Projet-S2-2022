@@ -44,6 +44,15 @@ public class GameController : MonoBehaviour
     
     [SerializeField] 
     private GameObject BulletModel;
+
+    [SerializeField] 
+    private AudioSource ShootSnd;
+    
+    [SerializeField] 
+    private AudioSource EmptyMag;
+    
+    [SerializeField] 
+    private AudioSource Killed;
     
     
     void Start()
@@ -51,6 +60,9 @@ public class GameController : MonoBehaviour
         //spawn player
         var player = Instantiate(PlayerModel, new Vector3(100, 2.75f, 70), Quaternion.Euler(0, 0, 0));
         player.GetComponent<Tank>().bullet = BulletModel;
+        player.GetComponent<Tank>().shootsnd = ShootSnd;
+        player.GetComponent<Tank>().emptyMag = EmptyMag;
+        player.GetComponent<Tank>().killed = Killed;
         
         //spawn first 3 ennemmies
         int nbspawns = _spawnpoints.Length;
@@ -70,12 +82,18 @@ public class GameController : MonoBehaviour
         
         var tank1 = Instantiate(EnemyTankModel, _spawnpoints[index1], _spawnQuaternions[index1]);
         tank1.GetComponent<EnemyTank>().bullet = BulletModel;
+        tank1.GetComponent<EnemyTank>().shootsnd = ShootSnd;
+        tank1.GetComponent<EnemyTank>().killed = Killed;
         
         var tank2 = Instantiate(EnemyTankModel, _spawnpoints[index2], _spawnQuaternions[index2]);
         tank2.GetComponent<EnemyTank>().bullet = BulletModel;
+        tank2.GetComponent<EnemyTank>().shootsnd = ShootSnd;
+        tank2.GetComponent<EnemyTank>().killed = Killed;
         
         var tank3 = Instantiate(EnemyTankModel, _spawnpoints[index3], _spawnQuaternions[index3]);
         tank3.GetComponent<EnemyTank>().bullet = BulletModel;
+        tank3.GetComponent<EnemyTank>().shootsnd = ShootSnd;
+        tank3.GetComponent<EnemyTank>().killed = Killed;
 
         _currnbenemy = 3;
     }
@@ -89,6 +107,8 @@ public class GameController : MonoBehaviour
             int index1 = r.Next(0, _spawnpoints.Length);
             var tank1 = Instantiate(EnemyTankModel, _spawnpoints[index1], _spawnQuaternions[index1]);
             tank1.GetComponent<EnemyTank>().bullet = BulletModel;
+            tank1.GetComponent<EnemyTank>().shootsnd = ShootSnd;
+            tank1.GetComponent<EnemyTank>().killed = Killed;
             _currnbenemy++;
         }
     }
