@@ -54,7 +54,7 @@ namespace Matchmaking
                 Firebase.usernameField = _inputField.text.ToString(); //demander à Amine
                 
             }
-            PhotonNetwork.NickName =  defaultName;
+            PhotonNetwork.NickName =  Firebase.User.UserId;
         }
 
 

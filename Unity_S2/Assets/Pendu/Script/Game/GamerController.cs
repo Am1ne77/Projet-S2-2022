@@ -17,59 +17,52 @@ using Data;
 
 namespace Game
 {
-    public class  GamerController : MonoBehaviour
+    public class GamerController : MonoBehaviour
     {
         public Text wordIndicator;
 
         public Text scoreIndicator;
         public Text letterIndicator;
-        
+
         public InputField Letter_input;
-        
+
         private static string _inputOfPlayer;
 
-       // private HangmanController hangman;
+        // private HangmanController hangman;
         private string word;
         private char[] revealed;
         private bool completed;
 
         private int nb_errors;
 
-        [SerializeField] 
-        private GameObject YouLost;
-        
-        [SerializeField] 
-        private GameObject YouWon;
-        
-        [SerializeField] 
-        private GameObject Buttons;
-        
-        [SerializeField] 
-        private GameObject btn_exit;
-        
-        [SerializeField] 
-        private GameObject Bonhomme;
+        [SerializeField] private GameObject YouLost;
+
+        [SerializeField] private GameObject YouWon;
+
+        [SerializeField] private GameObject Buttons;
+
+        [SerializeField] private GameObject btn_exit;
+
+        [SerializeField] private GameObject Bonhomme;
 
         private int ManPhase = 0;
-        
-        
-        [SerializeField] 
-        private AudioSource YouLost_Sound;
-        
-        [SerializeField] 
-        private AudioSource YouWon_Sound;
+
+
+        [SerializeField] private AudioSource YouLost_Sound;
+
+        [SerializeField] private AudioSource YouWon_Sound;
 
         public FirebaseManager Firebase;
-        
+
         private int score;
-        
-        
-        
+
+
+
         // Start is called before the first frame update
         void Start()
         {
             Firebase = FirebaseManager.Instance;
-            
+
             score = Firebase.xpPendu;
             //hangman = GameObject.FindGameObjectsWithTag("Player").GetComponent<HangmanController>();
             reset();
@@ -78,14 +71,14 @@ namespace Game
 
         public void Update()
         {
-            
-            
-            if(Letter_input.text != null)
-                 _inputOfPlayer = Letter_input.text;
+
+
+            if (Letter_input.text != null)
+                _inputOfPlayer = Letter_input.text;
 
             if (nb_errors == 7)
             {
-                
+
                 this.gameObject.SetActive(false);
                 YouLost.SetActive(true);
                 Buttons.SetActive(true);
@@ -93,8 +86,9 @@ namespace Game
                 {
                     revealed[i] = word[i];
                 }
+
                 UpdateWorldIndicator();
-                
+
                 YouLost_Sound.Play();
             }
 
@@ -104,16 +98,18 @@ namespace Game
                 this.gameObject.SetActive(false);
                 YouWon.SetActive(true);
                 Buttons.SetActive(true);
-                
+
                 for (int i = 1; i < 9; i++)
                 {
                     Bonhomme.transform.Find("Man" + i).gameObject.SetActive(false);
                 }
+
                 Bonhomme.transform.Find("Man8").gameObject.SetActive(true);
-                
+
                 YouWon_Sound.Play();
             }
         }
+
         // Update is called once per frame
         public void OnValidateCLick()
         {
@@ -122,6 +118,7 @@ namespace Game
                 if (Input.anyKeyDown)
                     next();
             }
+
             char? c = Pendu_main.GetInput().ToString().ToUpper()[0];
             if (c != null && TextUtils.isAlpha((char) c))
             {
@@ -140,9 +137,9 @@ namespace Game
         private bool check(char? c)
         {
             bool ret = false;
-            int complete = 0; 
+            int complete = 0;
             score = Firebase.xpPendu;
-                
+
             Debug.LogFormat(Firebase.xpField.ToString());
             for (int i = 0; i < revealed.Length; i++)
             {
@@ -151,16 +148,17 @@ namespace Game
                     ret = true;
                     if (revealed[i] == 0)
                     {
-                        
+
                         score += 100;
                         revealed[i] = (char) c;
                     }
                 }
+
                 if (revealed[i] != 0)
                 {
                     complete++;
                 }
-               
+
             }
 
             if (score != 0)
@@ -168,8 +166,9 @@ namespace Game
                 if (complete == revealed.Length)
                 {
                     this.completed = true;
-                    this.score += 100 *complete;
+                    this.score += 100 * complete;
                 }
+
                 UpdateWorldIndicator();
                 updateIndicatorScore();
             }
@@ -188,21 +187,22 @@ namespace Game
                     Bonhomme.transform.Find("Man" + (ManPhase - 1)).gameObject.SetActive(false);
                 }
             }
+
             return ret;
         }
 
         private void UpdateWorldIndicator()
         {
             string displayed = "";
-            
-            
+
+
             for (int i = 0; i < word.Length; i++)
             {
                 char c = revealed[i];
 
-                if (c == 0 )
+                if (c == 0)
                 {
-                    if (word[i] >= 'A' && word[i]<= 'Z' || word[i] >= 'a' && word[i] <= 'z')
+                    if (word[i] >= 'A' && word[i] <= 'Z' || word[i] >= 'a' && word[i] <= 'z')
                     {
                         c = '_';
                     }
@@ -222,7 +222,7 @@ namespace Game
 
         private void updateIndicatorScore()
         {
-            
+
             Firebase.xpPendu = score;
             scoreIndicator.text = "Score: " + score;
         }
@@ -232,21 +232,23 @@ namespace Game
             world = world.ToUpper();
             this.word = world;
             revealed = new char[world.Length];
-            letterIndicator.text =  " Letter: "+'\n';
+            letterIndicator.text = " Letter: " + '\n';
             UpdateWorldIndicator();
 
         }
+
         public void next()
         {
             word = GetWord();
             setWorld(word);
             //setWorld("A-tester*!é");
         }
+
         public static string GetWord(string path = "Assets/Pendu/Script/word_bank.txt")
         {
             if (!File.Exists(path))
                 throw new ArgumentException("Loader: couldn't load word bank at " + path);
-            
+
             try
             {
                 var index = new Random().Next(File.ReadLines(path).Count());
@@ -258,9 +260,10 @@ namespace Game
                 throw;
             }
         }
+
         public void reset()
         {
-            
+
             Firebase.xpPendu = score;
             Firebase.SaveDataButton("Pendu");
             nb_errors = 0;
@@ -280,6 +283,7 @@ namespace Game
             {
                 Bonhomme.transform.Find("Man" + i).gameObject.SetActive(false);
             }
+
             Debug.Log(word);
             reset();
         }
@@ -289,11 +293,15 @@ namespace Game
             Firebase.xpPendu = score;
             Firebase.SaveDataButton("Pendu");
             // DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
-           // WriteNewScore(DBreference.Child("users").Child(User.UserId).GetValueAsync(), score);
-            PhotonNetwork.LoadLevel(1);
-            PhotonNetwork.LeaveRoom();
-            
-        }
+            // WriteNewScore(DBreference.Child("users").Child(User.UserId).GetValueAsync(), score);
+            PhotonNetwork.LoadLevel(3);
 
+        }
+        public void Back()
+        {
+            PhotonNetwork.LoadLevel(3);
+
+        }
+        
     }
 }

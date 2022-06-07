@@ -14,8 +14,9 @@ using Random = UnityEngine.Random;
 using Data;
 
 using UnityEngine.SceneManagement;
+using Object = System.Object;
 
-public class Thegame : MonoBehaviour
+public class Thegame : MonoBehaviourPun, IPunObservable
 {
     const int RowCount = 6;
     const int ColsCount = 7;
@@ -25,13 +26,14 @@ public class Thegame : MonoBehaviour
     const char Player2Piece = '2';
     private const int WindowLen = 4;
     
-    private char[][] Board;
+    private char[][] Board;//
     private bool aienabled;
     private bool isplayerturn;
     private bool notyet;
     private bool gamestarted;
     private int AiDifficulty;
-    private int turn;
+    private int turn;//
+    private string support;
     
     public FirebaseManager Firebase;
     private Player[] listPlayer;
@@ -48,8 +50,14 @@ public class Thegame : MonoBehaviour
     public GameObject YouWonUi;
     public GameObject YouLostUi;
     public GameObject DrawUi;
+
+    public GameObject DisconnectedPlayer;
+    //public PhotonStream stream;
     
 
+    
+ 
+    
     //Initialise the board
     private char[][] CreateBoard()
     {
@@ -70,6 +78,7 @@ public class Thegame : MonoBehaviour
     
     
     //drop a piece
+    [PunRPC]
     private void DropPiece(char[][] b, int row, int col, char piece)
     {
         b[row][col] = piece;
@@ -85,6 +94,7 @@ public class Thegame : MonoBehaviour
     
     
     
+    [PunRPC]
     //find the next open row to place the piece
     private int GetNextOpenRow(char[][] b, int col)
     {
@@ -149,6 +159,7 @@ public class Thegame : MonoBehaviour
                 if (b[r][c] == piece && b[r-1][c+1] == piece && b[r-2][c+2] == piece && b[r-3][c+3] == piece)
                 {
                     return true;
+                   
                 }
             }
         }
@@ -158,7 +169,19 @@ public class Thegame : MonoBehaviour
 
     private bool Draw(char[][] b)
     {
-        return b[0].Count(c => c == '.') == 0;
+        var a = "";
+        foreach (var col in b)
+        {
+            foreach (var pion in col)
+            {
+                a += " " + pion;
+
+            }
+
+            a += '\n';
+        }
+        Debug.Log((a));
+        return b[0].Count(c => c == '.') ==0;
     }
 
 
@@ -447,10 +470,15 @@ public class Thegame : MonoBehaviour
         char[][] board = CreateBoard();
         return board;
     }
-
+    
     public void Start()
     {
-        Firebase = FirebaseManager.Instance;
+        PhotonNetwork.SendRate = 20;
+        PhotonNetwork.SerializationRate = 10;
+        Firebase=FirebaseManager.Instance;
+
+        
+        
         Board = setup();
         if (PhotonNetwork.IsConnected)
         {
@@ -459,39 +487,40 @@ public class Thegame : MonoBehaviour
             {
                 turn = 0;
                 listPlayer = PhotonNetwork.PlayerList;
-                if (Random.Range(0,2) == 1)
-                {
-                    (listPlayer[0],listPlayer[1]) = (listPlayer[1],listPlayer[0]);
-                }
+                int rand = Random.Range(0, 2);
+                gamestarted = true;
+                //(listPlayer[rand],listPlayer[1-rand]) = (listPlayer[1],listPlayer[0]);
+                
+                TurnIndicator.gameObject.SetActive(true);
+                ToggleButtonsOnline();
+                
             }
-            else
-            {
-                aienabled = true;
-                isplayerturn = isplayerturn = Random.Range(0,2) == 1;;
-            }
-            
         }
         else
         {
+            
             aienabled = true;
-            isplayerturn = isplayerturn = Random.Range(0,2) == 1;
+            
+            //isplayerturn = isplayerturn = Random.Range(0,2) == 1;
+            isplayerturn = Random.Range(0,2) == 1;
+            DifficultyCanvas.gameObject.SetActive(true);
+            gamestarted = false;
+            for (int i = 0; i < 7; i++)
+            {
+                Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(false);
+            }
         }
 
-        gamestarted = false;
         //TurnIndicator.gameObject.SetActive(false);
-        DifficultyCanvas.gameObject.SetActive(true);
         
-        for (int i = 0; i < 7; i++)
-        {
-            Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(false);
-        }
+        
     }
 
     public void Update()
     {
-        
         if (!gamestarted)
         {
+            Debug.Log("update : gamestarted is false");
             return;
         }
 
@@ -501,10 +530,11 @@ public class Thegame : MonoBehaviour
             {
                 TurnIndicator.gameObject.SetActive(false);
                 EndGameUi.SetActive(true);
+                Setting.SetActive(false);
 
                 if (Win(Board, Player1Piece))
                 {
-                    Firebase.xpPuissance4 += 100 * AiDifficulty;
+                    Firebase.xpPuissance4 += 150 * AiDifficulty;
                     YouWonUi.SetActive(true);
                 }
                 else
@@ -597,8 +627,18 @@ public class Thegame : MonoBehaviour
         }
         else
         {
+            if (PhotonNetwork.PlayerList.Length == 1)
+            {
+                DisconnectedPlayer.SetActive(true); 
+                PhotonNetwork.LeaveRoom();
+                SceneManager.LoadScene(2);
+                return;
+
+            }
             if (!gamestarted)
             {
+                
+                Debug.Log("update : gamestarted is false");
                 return;
             }
             
@@ -606,15 +646,18 @@ public class Thegame : MonoBehaviour
             {
                 TurnIndicator.gameObject.SetActive(false);
                 EndGameUi.SetActive(true);
+                Setting.SetActive(false);
 
                 if (Win(Board, Player1Piece))
                 {
                     if (PhotonNetwork.IsMasterClient)
                     {
+                        Firebase.xpPuissance4 += 200 * turn;
                         YouWonUi.SetActive(true);
                     }
                     else
                     {
+                        Firebase.xpPuissance4 -= 100 * turn;
                         YouLostUi.SetActive(true);
                     }
                 }
@@ -628,11 +671,12 @@ public class Thegame : MonoBehaviour
                     {
                         if (PhotonNetwork.IsMasterClient)
                         {
-                            
+                            Firebase.xpPuissance4 -= 100 * turn;
                             YouLostUi.SetActive(true);
                         }
                         else
                         {
+                            Firebase.xpPuissance4 += 200 * turn;
                             YouWonUi.SetActive(true);
                         }
                     }
@@ -640,14 +684,8 @@ public class Thegame : MonoBehaviour
 
                 gamestarted = false;
             }
-            
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
-            {
-                return;
-            }
         }
     }
-
     public void ToggleButtons()
     {
         bool active = !Buttons.transform.Find("Button_Col_0_").gameObject.activeInHierarchy;
@@ -673,15 +711,42 @@ public class Thegame : MonoBehaviour
             Buttons.transform.Find("Button_Col_" + i +"_").gameObject.SetActive(active);
         }
     }
+    
+    [PunRPC]
+    public void ToggleButtonsOnline()
+    {
+        bool active = Equals(PhotonNetwork.PlayerList[turn % 2], PhotonNetwork.LocalPlayer);
+        active = ((turn % 2 == 0 && PhotonNetwork.IsMasterClient) ||
+                  (turn % 2 == 1 && (!PhotonNetwork.IsMasterClient)));
+
+        if (TurnIndicator.gameObject.activeInHierarchy)
+        {
+            Text toChange = GameObject.Find("Canvas/Turn Indicator").GetComponent<Text>();
+            if (active)
+            {
+                toChange.text = "Your Turn !";
+                toChange.color = new Color((248.0f / 255.0f), (144.0f / 255.0f), (231.0f / 255.0f));
+            }
+            else
+            {
+                toChange.text = "Wait ...";
+                toChange.color = new Color((11.0f / 255.0f), (211.0f / 255.0f), (211.0f / 255.0f));
+            }
+        }
+
+        for (int i = 0; i < 7; i++)
+        {
+            Buttons.transform.Find("Button_Col_" + i +"_").gameObject.SetActive(active);
+        }
+    }
 
     //C moche mais flemme
     #region DropColsPlayer1
-    
+    [PunRPC]
     public void DropCol0()
     {
         if (aienabled)
         {
-
             if (!isplayerturn)
             {
                 return;
@@ -699,18 +764,23 @@ public class Thegame : MonoBehaviour
             if (row != 5)
             {
                 Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+                support = "support.0" + row;
             }
 
             Instantiate(Pions1, spawn, transform.rotation);
             isplayerturn = false;
             notyet = false;
+            
         }
         else
         {
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            Debug.Log(Equals(PhotonNetwork.PlayerList[turn % 2],PhotonNetwork.LocalPlayer));
+            //if (!Equals(PhotonNetwork.PlayerList[turn % 2],PhotonNetwork.LocalPlayer))
+            if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
             }
+
             if (!IsValidLocation(Board, 0))
             {
                 Debug.Log("Col full");
@@ -725,18 +795,40 @@ public class Thegame : MonoBehaviour
                 p = Player2Piece;
                 r = Pions2;
             }
-            
+
             DropPiece(Board, row, 0, p);
             var spawn = new Vector3(265, 25, 120);
-            if (row != 5)
+            Debug.Log("row: "+row);
+           
+            if (row!= 0)
             {
-                Plateau.transform.Find("support.0" + row).gameObject.SetActive(true);
+                //photonView.RPC("Support",RpcTarget.All,'0',row);
+                Debug.Log(("active supp"));
+                
+                Plateau.transform.Find("support.0"+row.ToString()).gameObject.SetActive(true);
             }
-
-            Instantiate(r, spawn, transform.rotation);
-            isplayerturn = false;
+        
+            PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
+            photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
+            ToggleButtonsOnline();
         }
+    }
+
+    [PunRPC]
+    private void Support(char col, int row)
+    {
+        if (row != 5)
+        {
+            Plateau.transform.Find("support." + col.ToString() + row.ToString()).gameObject.SetActive(true);
+            Debug.Log("support  active " + row);
+        }
+    }
+
+    [PunRPC]
+    private void AddTurn()
+    {
+        turn++;
     }
     
     public void DropCol1()
@@ -768,7 +860,7 @@ public class Thegame : MonoBehaviour
         }
         else
         {
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
             }
@@ -794,9 +886,12 @@ public class Thegame : MonoBehaviour
                 Plateau.transform.Find("support.1" + row).gameObject.SetActive(true);
             }
 
-            Instantiate(r, spawn, transform.rotation);
-            isplayerturn = false;
+            PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
+            photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
+            Debug.Log(Board[0][5]);
+            ToggleButtonsOnline();
+            
         }
     }
     
@@ -831,7 +926,7 @@ public class Thegame : MonoBehaviour
         }
         else
         {
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
             }
@@ -857,9 +952,11 @@ public class Thegame : MonoBehaviour
                 Plateau.transform.Find("support.2" + row).gameObject.SetActive(true);
             }
 
-            Instantiate(r, spawn, transform.rotation);
-            isplayerturn = false;
+            PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
+            photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
+            Debug.Log(Board[0][5]);
+            ToggleButtonsOnline();
         }
     }
     
@@ -893,7 +990,8 @@ public class Thegame : MonoBehaviour
         }
         else
         {
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            
+            if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
             }
@@ -919,9 +1017,11 @@ public class Thegame : MonoBehaviour
                 Plateau.transform.Find("support.3" + row).gameObject.SetActive(true);
             }
 
-            Instantiate(r, spawn, transform.rotation);
-            isplayerturn = false;
+            PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
+            photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
+            Debug.Log(Board[0][5]);
+            ToggleButtonsOnline();
         }
     }
     
@@ -954,7 +1054,7 @@ public class Thegame : MonoBehaviour
         }
         else
         {
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
             }
@@ -980,9 +1080,11 @@ public class Thegame : MonoBehaviour
                 Plateau.transform.Find("support.4" + row).gameObject.SetActive(true);
             }
 
-            Instantiate(r, spawn, transform.rotation);
-            isplayerturn = false;
+            PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
+            photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
+            Debug.Log(Board[0][5]);
+            ToggleButtonsOnline();
         }
 
     }
@@ -1016,7 +1118,7 @@ public class Thegame : MonoBehaviour
         }
         else
         {
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
             }
@@ -1042,9 +1144,11 @@ public class Thegame : MonoBehaviour
                 Plateau.transform.Find("support.5" + row).gameObject.SetActive(true);
             }
 
-            Instantiate(r, spawn, transform.rotation);
-            isplayerturn = false;
+            PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
+            photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
+            Debug.Log(Board[0][5]);
+            ToggleButtonsOnline();
         }
 
     }
@@ -1079,7 +1183,7 @@ public class Thegame : MonoBehaviour
         }
         else
         {
-            if (listPlayer[turn % 2] != PhotonNetwork.LocalPlayer)
+            if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
             }
@@ -1105,9 +1209,11 @@ public class Thegame : MonoBehaviour
                 Plateau.transform.Find("support.6" + row).gameObject.SetActive(true);
             }
 
-            Instantiate(r, spawn, transform.rotation);
-            isplayerturn = false;
+            PhotonNetwork.Instantiate(r.name, spawn, transform.rotation);
+            photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
+            Debug.Log(Board[0][5]);
+            ToggleButtonsOnline();
         }
     }
 
@@ -1306,12 +1412,15 @@ public class Thegame : MonoBehaviour
     {
         
         Firebase.SaveDataButton("Puissance4");
-        SceneManager.LoadScene(1);
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) PhotonNetwork.LoadLevel(3);
+        else SceneManager.LoadScene(1);
     }
 
     public void PlayAgain()
     {
+        if (PhotonNetwork.CountOfPlayers==1)  SceneManager.LoadScene(2); 
         EndGameUi.SetActive(false);
+        Setting.SetActive(true);
         YouLostUi.SetActive(false);
         YouWonUi.SetActive(false);
         DrawUi.SetActive(false);
@@ -1319,8 +1428,9 @@ public class Thegame : MonoBehaviour
         
         TurnIndicator.gameObject.SetActive(true);
 
-        DifficultyCanvas.gameObject.SetActive(true);
+        if(! PhotonNetwork.IsConnected)DifficultyCanvas.gameObject.SetActive(true);
         Board = setup();
+        turn = 0;
 
         GameObject[] allpawns = GameObject.FindGameObjectsWithTag("Pion");
         foreach (var pawn in allpawns)
@@ -1358,4 +1468,104 @@ public class Thegame : MonoBehaviour
     }
 
     #endregion
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        
+        if (stream.IsWriting)
+        {
+            Debug.Log("writing");
+            //stream.SendNext(Board);
+            stream.SendNext(turn);
+
+            var a = "";
+            for (int i = 0; i < RowCount; i++)
+            {
+                for (int j = 0; j < ColsCount; j++)
+                {
+                    a += " " + Board[i][j];
+                    if (Board[i][j]=='.') stream.SendNext(0);
+                    else if (Board[i][j] is Player1Piece) stream.SendNext(1);
+                    else stream.SendNext(2);
+                }
+                a += '\n';
+            }
+            //stream.SendNext(support);
+            Debug.Log("send"+ a);
+        }
+        else if (stream.IsReading)
+        {
+            Debug.Log("reading");
+            //Board = (char[][]) stream.ReceiveNext();
+            turn =(int) stream.ReceiveNext();
+            var b= "";
+            for (int i = 0; i < RowCount; i++)
+            {
+                for (int j = 0; j < ColsCount; j++)
+                {
+                    var a = stream.ReceiveNext();
+                    b += " " + a;
+                    if (a == (object) 1)
+                    {
+                        
+                        //Support(i.ToString()[0],j.ToString()[0]);
+                        Board[i][j] = Player1Piece;
+                        
+                    }
+                    else if (a == (object) 2)
+                    {
+                        
+                        //Support(i.ToString()[0],j.ToString()[0]);
+                        Board[i][j] = Player2Piece;
+                    }
+                    else Board[i][j] = '.';
+                }
+
+                b += '\n';
+
+            }
+            Debug.Log("receive "+ b);
+            //support = (string) stream.ReceiveNext();
+            //if (support !=null)Plateau.transform.Find(support).gameObject.SetActive(true);
+        }
+        ToggleButtonsOnline();
+        
+    }
+
+    public GameObject OptionsUI;
+    public GameObject BTNChangeGame;
+    public GameObject Setting;
+    public void SettingScren()
+    {
+        OptionsUI.SetActive(true);
+        if (PhotonNetwork.IsMasterClient) BTNChangeGame.SetActive(true);
+
+    }
+    
+    public void SettingExit()
+    {
+        OptionsUI.SetActive(false);
+        BTNChangeGame.SetActive(false);
+    }
+
+    public void ChangeGame()
+    {
+        PhotonNetwork.LoadLevel(3);
+    }
+
+    public void MainMenu()
+    {
+        Firebase.SignOutButton();
+        PhotonNetwork.DestroyAll();
+        SceneManager.LoadScene(1);
+
+    }
+
+    public Slider slider;
+
+    public void SliderControll()
+    {
+        Debug.Log(Firebase.Audio);
+        Firebase.Audio.volume = slider.value;
+    }
 }

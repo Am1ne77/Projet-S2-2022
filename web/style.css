@@ -52,7 +52,8 @@ h1 span {
 }
 nav{
 width : 100%;
-background-color:black;}
+background-color:black;
+}
 nav >  ul {
 	position: absolute;
     top: 6%;
@@ -61,7 +62,7 @@ nav >  ul {
 	padding:0px;
 }
 nav >ul::after{
-	content: ="";
+	content: "";
 	display:block;
 	clear:both;
 	
