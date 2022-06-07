@@ -57,21 +57,21 @@ public class EnemyTank : MonoBehaviour
         }
         
         //Destroy tanks if the player is destroyed
-        if ((DateTime.Now - LastTimeSeen).Seconds > 1)
+        if ((DateTime.Now - LastTimeSeen).Seconds > 0)
         {
             Destroy(this.gameObject);
             Destroy(this);
         }
 
-        //Ai looks towards and player and moves
-        transform.LookAt(target);
-        if (Vector3.Distance(_rigidbody.position, target.transform.position) > 15)
+        if (target != null)
         {
-            _rigidbody.AddForce(transform.forward * 15);
+            //Ai looks towards and player and moves
+            transform.LookAt(target);
+            if (Vector3.Distance(_rigidbody.position, target.transform.position) > 15)
+            {
+                _rigidbody.AddForce(transform.forward * 15);
+            }
         }
-        
-        
-        
         //Ai shoot
         TimeSpan ready = DateTime.Now - LastShot;
         if (ready.Seconds >= 5)
