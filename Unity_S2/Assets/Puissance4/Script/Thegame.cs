@@ -485,6 +485,16 @@ public class Thegame : MonoBehaviourPun, IPunObservable
                 ToggleButtonsOnline();
                 
             }
+            else
+            {
+                isplayerturn = Random.Range(0,2) == 1;
+                DifficultyCanvas.gameObject.SetActive(true);
+                gamestarted = false;
+                for (int i = 0; i < 7; i++)
+                {
+                    Buttons.transform.Find("Button_Col_" + i + "_").gameObject.SetActive(false);
+                }
+            }
         }
         else
         {
@@ -1556,7 +1566,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
     public GameObject Setting;
     public void SettingScren()
     {
-        OptionsUI.SetActive(true);
+        OptionsUI.SetActive(true); 
         if (PhotonNetwork.IsMasterClient) BTNChangeGame.SetActive(true);
 
     }
