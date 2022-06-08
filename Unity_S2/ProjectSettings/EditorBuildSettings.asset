@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Puissance4.unity
     guid: 3d3e1ad051b552c49a535926954d46fd
+  - enabled: 1
+    path: Assets/Scenes/TankLvl1.unity
+    guid: 2058c3df36c1dcc48a8de8ec3184f3a8
   m_configObjects: {}
