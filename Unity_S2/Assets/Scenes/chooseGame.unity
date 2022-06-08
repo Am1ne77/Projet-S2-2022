@@ -742,9 +742,15 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Work in progress...
+  m_Text: 'The war is declared ! Try surviving against infinit waves of tanks and
+    ancor yourself as a war hero.
 
-'
+
+    Rule : destroy the most tanks possible before
+    being killed. Be careful you only have one life.
+
+
+    Player(s) : 1'
 --- !u!222 &1333728559
 CanvasRenderer:
   m_ObjectHideFlags: 0
