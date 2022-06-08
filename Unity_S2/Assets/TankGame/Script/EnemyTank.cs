@@ -15,6 +15,8 @@ public class EnemyTank : MonoBehaviour
     
     [HideInInspector] 
     public AudioSource killed;
+
+    private ParticleSystem Explosion;
     
     private static Transform target;
 
@@ -28,8 +30,11 @@ public class EnemyTank : MonoBehaviour
     
     private Transform ShootPoint;
 
+    private bool StillAlive = true;
+
     public void Awake()
     {
+        Explosion = GetComponent<ParticleSystem>();
         LastShot = DateTime.Now;
         LastTimeSeen = DateTime.Now;
         _rigidbody = GetComponent<Rigidbody>();
@@ -57,7 +62,7 @@ public class EnemyTank : MonoBehaviour
         }
         
         //Destroy tanks if the player is destroyed
-        if ((DateTime.Now - LastTimeSeen).Seconds > 0)
+        if ((DateTime.Now - LastTimeSeen).Seconds > 1)
         {
             Destroy(this.gameObject);
             Destroy(this);
@@ -86,31 +91,48 @@ public class EnemyTank : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //Gets destroyed by bullet
-        if ((collision.gameObject.CompareTag("Bullet") && (DateTime.Now - LastShot).Milliseconds > 50))
+        if ((collision.gameObject.CompareTag("Bullet") && (DateTime.Now - LastShot).Milliseconds > 50) && StillAlive)
         {
-            Destroy(this);
+            //if not working use this for all following
+            /*Destroy(this);
             Destroy(this.gameObject);
             GameController.EnemyDestroyed();
+            killed.Play();*/
+            StillAlive = false;
+            
             killed.Play();
+            Explosion.Play();
+            Destroy(this.transform.GetChild(2).gameObject);
+            Destroy(this.gameObject,1);
+            GameController.EnemyDestroyed();
+            Destroy(this,1);
         }
 
         //Gets destroyed by the player if his speed is greater
-        if (collision.gameObject.CompareTag("Player") && collision.rigidbody.velocity.magnitude >  _rigidbody.velocity.magnitude)
+        if (collision.gameObject.CompareTag("Player") && collision.rigidbody.velocity.magnitude >  _rigidbody.velocity.magnitude && StillAlive)
         {
-            Destroy(this);
-            Destroy(this.gameObject);
-            GameController.EnemyDestroyed();
+            StillAlive = false;
+            
             killed.Play();
+            Explosion.Play();
+            Destroy(this.transform.GetChild(2).gameObject);
+            Destroy(this.gameObject,1);
+            GameController.EnemyDestroyed();
+            Destroy(this,1);
         }
         
         //Collision between wall and very fast enemy
         if ((collision.gameObject.CompareTag("VerticalWall") || collision.gameObject.CompareTag("HorizontalWall")
-            ||collision.gameObject.CompareTag("Walls")) && _rigidbody.velocity.magnitude >= 6)
+            ||collision.gameObject.CompareTag("Walls")) && _rigidbody.velocity.magnitude >= 6 && StillAlive)
         {
-            Destroy(this);
-            Destroy(this.gameObject);
-            GameController.EnemyDestroyed();
+            StillAlive = false;
+            
             killed.Play();
+            Explosion.Play();
+            Destroy(this.transform.GetChild(2).gameObject);
+            Destroy(this.gameObject,1);
+            GameController.EnemyDestroyed();
+            Destroy(this,1);
         }
         
         //Collision between 2 enemies

@@ -17,6 +17,8 @@ public class Tank : MonoBehaviour
     
     [HideInInspector] 
     public AudioSource killed;
+    
+    private ParticleSystem Explosion;
 
     private DateTime LastShot;
     
@@ -24,8 +26,11 @@ public class Tank : MonoBehaviour
 
     private Transform ShootPoint;
 
+    private bool StillAlive = true;
+
     void Awake()
     {
+        Explosion = GetComponent<ParticleSystem>();
         //Shooting timer
         LastShot = DateTime.Now;
         _rigidbody = GetComponent<Rigidbody>();
@@ -86,12 +91,26 @@ public class Tank : MonoBehaviour
     private void OnCollisionEnter(Collision collisionInfo)
     {
         //Not implemented yet: the player is hit by bullet
-        if (collisionInfo.gameObject.CompareTag("Bullet"))
+        if (collisionInfo.gameObject.CompareTag("Bullet") && StillAlive) 
         {
-            killed.Play();
+            //explosion working
+            /*killed.Play();
+            this.gameObject.SetActive(false);
+            this.gameObject.GetComponent<ParticleSystem>().gameObject.SetActive(true);
+            Explosion.Play();
+            Destroy(this.transform.GetChild(1).gameObject);
+            Destroy(this.gameObject,1);
             GameController.EndGame();
-            Destroy(this.gameObject); 
-            Destroy(this);
+            Destroy(this,1);*/
+
+            StillAlive = false;
+            
+            killed.Play();
+            Explosion.Play();
+            Destroy(this.transform.GetChild(1).gameObject);
+            Destroy(this.gameObject,1);
+            GameController.EndGame();
+            Destroy(this,1);
         }
     }
 
