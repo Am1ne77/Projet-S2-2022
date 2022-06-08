@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 using System;
-using UnityEditor;
 
 using Photon.Pun;
-using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 using Data;
 
@@ -105,7 +103,8 @@ public class GameController : MonoBehaviour
     {
         Firebase=FirebaseManager.Instance;
         Firebase.Audio.Pause();
-            //Determine the spawn location depending on the scene
+        
+        //Determine the spawn location depending on the scene
         DetermineSpawnForScene();
 
         //spawn player
