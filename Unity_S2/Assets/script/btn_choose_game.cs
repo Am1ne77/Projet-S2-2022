@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Data;
 using UnityEngine;
-
+using Random = System.Random;
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -14,42 +14,35 @@ public class btn_choose_game : MonoBehaviour
     public static UIManager instance;
     public static FirebaseManager Firebase;
 
+    public GameObject hangManButton;
+    
+    public GameObject tankButton;
     //Screen object variables
     public void Start()
     {
-        //if (!Firebase.Audio.isPlaying) Firebase.Audio.Play();
+        if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
+        {
+            hangManButton.gameObject.SetActive(false);
+            tankButton.gameObject.SetActive(false);
+        }
     }
 
     public void Hangman()
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            if (PhotonNetwork.PlayerList.Length>1)
-            {
-                return;
-            }
-        }
-
         PhotonNetwork.LoadLevel(4);
     }
     public void Puissance_4()
     {
-
-        if (PhotonNetwork.IsConnected )
-        {
-            if (PhotonNetwork.PlayerList.Length>1 &&!PhotonNetwork.IsMasterClient) return;
-            PhotonNetwork.LoadLevel(5);
-        }
-        else SceneManager.LoadScene(5);
+        PhotonNetwork.LoadLevel(5); 
+        //else SceneManager.LoadScene(5);
     }
     public void MiniTank()
     {
-        if (PhotonNetwork.IsConnected)
-        { 
-            if (PhotonNetwork.PlayerList.Length>1 && !PhotonNetwork.IsMasterClient) return;
-            PhotonNetwork.LoadLevel(6);
-        }
-        else SceneManager.LoadScene(6);
+        Random r = new Random();
+        int lev = r.Next(6,8);
+        
+        PhotonNetwork.LoadLevel(lev);
+       // else SceneManager.LoadScene(6);
     }
     
     

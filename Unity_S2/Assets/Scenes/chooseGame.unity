@@ -593,7 +593,7 @@ GameObject:
   - component: {fileID: 1120068527}
   - component: {fileID: 1120068526}
   m_Layer: 5
-  m_Name: C4 descr
+  m_Name: MT descr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -645,25 +645,21 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 100
-    m_Alignment: 3
+    m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Challenge your puzzle skills against a friend or an AI under the summer
-    heat in this tropical connect four !
+  m_Text: 'The war is declared ! Try surviving against infinit waves of tanks and
+    ancor yourself as a war hero.
 
 
-    Rule : be the first to align four
-    of your fruits horizontally, vertivally or in diagonal
+    Rule : destroy the most tanks possible before
+    being killed. Be careful you only have one life.
 
 
-    Player(s) : 1 (against
-    the AI) or 2
-
-
-    Difficulty : easy/medium/extreme'
+    Player(s) : 1'
 --- !u!222 &1120068527
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -684,7 +680,7 @@ GameObject:
   - component: {fileID: 1333728559}
   - component: {fileID: 1333728558}
   m_Layer: 5
-  m_Name: MT descr
+  m_Name: C4 descr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -742,15 +738,19 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'The war is declared ! Try surviving against infinit waves of tanks and
-    ancor yourself as a war hero.
+  m_Text: 'Challenge your puzzle skills against a friend or an AI under the summer
+    heat in this tropical connect four !
 
 
-    Rule : destroy the most tanks possible before
-    being killed. Be careful you only have one life.
+    Rule : be the first to align four
+    of your fruits horizontally, vertivally or in diagonal
 
 
-    Player(s) : 1'
+    Player(s) : 1 (against
+    the AI) or 2
+
+
+    Difficulty : easy / medium / hard'
 --- !u!222 &1333728559
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -869,6 +869,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72a45fb108d4e964b82988250485f06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hangManButton: {fileID: 1044260998}
+  tankButton: {fileID: 2132981523}
 --- !u!4 &1377035070
 Transform:
   m_ObjectHideFlags: 0
@@ -1179,7 +1181,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 640, y: 135}
+  m_AnchoredPosition: {x: 0, y: -270}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1907658551
@@ -1288,7 +1290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57352b913131f64498a36ad62edee7dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  descr: {fileID: 1120068524}
+  descr: {fileID: 1333728556}
 --- !u!1 &2082001226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1447,7 +1449,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -270}
+  m_AnchoredPosition: {x: 640, y: 135}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2132981525
@@ -1556,7 +1558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b335c04635d10442abd8be0159da971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  descr: {fileID: 1333728556}
+  descr: {fileID: 1120068524}
 --- !u!1 &2138705887
 GameObject:
   m_ObjectHideFlags: 0
