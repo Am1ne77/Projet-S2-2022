@@ -9,9 +9,14 @@
 	
     <img src="ressources/background.jpg" rel="stylesheet" style="width:100%;height:55%;">
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> <!-- obligatoire obliger pour le site tu les trouve sur internet-->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> <!-- obligatore cher les pluggin pour sa fonction -->
-   <script src="firebase.js" ></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> <!-- obligatoire obliger pour le site tu les trouve sur internet--><!-- obligatore cher les pluggin pour sa fonction -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    
 
 
     <style>
@@ -39,15 +44,10 @@
 			<li><a href="score.html">SCOREBOARD</a></li>
 		</ul>
         
-    <button onclick = "setup()" id = "setUp"></button>
 	</nav>
 
-<center><table style="color: white; ">
-
-
-
-
-
+<center><table style="color: rgb(255, 255, 255); ">
+    <script src="firebase.js" ></script>
     <thread>
     <tr>
         <th>Position</th>
@@ -58,47 +58,9 @@
         <th>XpMiniTanks</th>
     </tr>
     </thread>
-    <tbody>
-    <tr>
-        <td>1</td>
-        <td>krisboul</td>
-        <td>4300</td>
-        <td>4200</td>
-        <td>100</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>tina</td>
-        <td>2700</td>
-        <td>2400</td>
-        <td>300</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>paul</td>
-        <td>2700</td>
-        <td>2400</td>
-        <td>300</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>amine</td>
-        <td>2700</td>
-        <td>2400</td>
-        <td>300</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>attilio</td>
-        <td>2700</td>
-        <td>2400</td>
-        <td>300</td>
-        <td>0</td>
-    </tr>
+    <tbody id="tbody">
+
+        <script src="script.js"></script> 
 </tbody>
 </table></center>
 </h2>
