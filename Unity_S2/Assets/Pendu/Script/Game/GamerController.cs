@@ -232,7 +232,7 @@ namespace Game
             world = world.ToUpper();
             this.word = world;
             revealed = new char[world.Length];
-            letterIndicator.text = " Letter: " + '\n';
+            letterIndicator.text = " Letter(s): " + '\n';
             UpdateWorldIndicator();
 
         }
