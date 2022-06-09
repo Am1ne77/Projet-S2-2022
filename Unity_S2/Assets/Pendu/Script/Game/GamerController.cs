@@ -25,6 +25,12 @@ namespace Game
         public Text letterIndicator;
 
         public InputField Letter_input;
+        
+        public Slider slider;
+        
+        public GameObject OptionsUI;
+        public GameObject BTNChangeGame;
+        public GameObject Setting;
 
         private static string _inputOfPlayer;
 
@@ -40,6 +46,8 @@ namespace Game
         [SerializeField] private GameObject YouWon;
 
         [SerializeField] private GameObject Buttons;
+        
+        [SerializeField] private GameObject EndUI;
 
         [SerializeField] private GameObject btn_exit;
 
@@ -80,8 +88,10 @@ namespace Game
             {
 
                 this.gameObject.SetActive(false);
+                Setting.SetActive(false);
+                EndUI.SetActive(true);
                 YouLost.SetActive(true);
-                Buttons.SetActive(true);
+                //Buttons.SetActive(true);
                 for (int i = 0; i < revealed.Length; i++)
                 {
                     revealed[i] = word[i];
@@ -96,8 +106,10 @@ namespace Game
             {
 
                 this.gameObject.SetActive(false);
+                Setting.SetActive(false);
+                EndUI.SetActive(true);
                 YouWon.SetActive(true);
-                Buttons.SetActive(true);
+                //Buttons.SetActive(true);
 
                 for (int i = 1; i < 9; i++)
                 {
@@ -269,9 +281,10 @@ namespace Game
             nb_errors = 0;
             ManPhase = 0;
             completed = false;
+            EndUI.SetActive(false);
             YouLost.SetActive(false);
             YouWon.SetActive(false);
-            Buttons.SetActive(false);
+            //Buttons.SetActive(false);
             this.gameObject.SetActive(true);
             updateIndicatorScore();
             next();
@@ -297,11 +310,34 @@ namespace Game
             PhotonNetwork.LoadLevel(3);
 
         }
+        
+        public void SettingScren()
+        {
+            OptionsUI.SetActive(true); 
+            if (PhotonNetwork.IsMasterClient) BTNChangeGame.SetActive(true);
+            else BTNChangeGame.SetActive(true);
+        }
+    
+        public void SettingExit()
+        {
+            OptionsUI.SetActive(false);
+            BTNChangeGame.SetActive(false);
+        }
         public void Back()
         {
             PhotonNetwork.LoadLevel(3);
-
         }
         
+        public void MainMenu()
+        {
+            Firebase.SignOutButton();
+            PhotonNetwork.DestroyAll();
+            SceneManager.LoadScene(1);
+
+        }
+        public void SliderControll()
+        {
+            Firebase.Audio.volume = slider.value;
+        }
     }
 }

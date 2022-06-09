@@ -952,11 +952,12 @@ MonoBehaviour:
     possible !!
 
 
-    rule : try to guess lettre by lettre a given word but do not
-    make to many mistakes or you will pay a gruesome price...
+    Rule : try to guess letter by letter a given word but do not
+    make too many mistakes or you will pay a gruesome price...
 
 
-    player(s) : 1'
+    Player(s) :
+    1'
 --- !u!222 &784171658
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1382,12 +1383,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'The war is declared ! Try surviving against infinit waves of tanks and
-    ancor yourself as a war hero.
+  m_Text: 'The war is declared ! Try surviving against infinite waves of tanks and
+    anchor yourself as a war hero.
 
 
-    Rule : destroy the most tanks possible before
-    being killed. Be careful you only have one life.
+    Rule : Stay alive as long as you can and
+    earn additional points by destroying enemies tanks . Be careful you only have
+    one life.
 
 
     Player(s) : 1'
@@ -1607,7 +1609,7 @@ MonoBehaviour:
 
 
     Rule : be the first to align four
-    of your fruits horizontally, vertivally or in diagonal
+    of your fruits horizontally, vertically or in diagonal
 
 
     Player(s) : 1 (against
@@ -1693,7 +1695,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Hang Man
+  m_Text: 'HangMan
 
 '
 --- !u!222 &1360264069
