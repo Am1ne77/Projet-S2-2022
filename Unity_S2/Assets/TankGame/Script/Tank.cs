@@ -109,11 +109,12 @@ public class Tank : MonoBehaviour
             Explosion.Play();
             Destroy(this.transform.GetChild(1).gameObject);
             Destroy(this.gameObject,1);
-            GameController.EndGame();
-            Destroy(this,1);
+            GameController.isEnd = true;
+            Destroy(this,2);
         }
     }
 
+    
     private void IsOutOfBounds()
     {
         //Check if player is Out of Bounds to Destroy him
