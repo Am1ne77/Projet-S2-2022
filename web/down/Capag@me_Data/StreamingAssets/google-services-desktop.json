@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "423648182646",
+    "firebase_url": "https://capagame-d54ad-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "capagame-d54ad",
+    "storage_bucket": "capagame-d54ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423648182646:android:852c49f9ff1a50bc883a57",
+        "android_client_info": {
+          "package_name": "com.capagame.impact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423648182646-ar1pb17lc0qa88ol5ia3jhl98sfbv02j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsudLlgGrkiqcRaDn-SvjwzRbnOrmplvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423648182646-ar1pb17lc0qa88ol5ia3jhl98sfbv02j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "423648182646-df6jignne8aoqq6b5mvueeenm863m0ad.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.capagame.impact"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
