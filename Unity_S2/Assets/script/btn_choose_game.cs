@@ -8,15 +8,19 @@ using Photon.Realtime;
 
 
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class btn_choose_game : MonoBehaviour
 {
     public static UIManager instance;
     public static FirebaseManager Firebase;
-
-    public GameObject hangManButton;
     
+    public GameObject OptionsUI;
+    public GameObject hangManButton;
     public GameObject tankButton;
+
+    public Slider slider;
+
     //Screen object variables
     public void Start()
     {
@@ -45,5 +49,29 @@ public class btn_choose_game : MonoBehaviour
        // else SceneManager.LoadScene(6);
     }
     
+    public void SettingScren()
+    {
+        OptionsUI.SetActive(true);
+    }
+
+    public void SettingExit()
+    {
+        OptionsUI.SetActive(false);
+    }
     
+    public void MainMenu()
+    {
+        Firebase.SignOutButton();
+        PhotonNetwork.DestroyAll();
+        SceneManager.LoadScene(1);
+
+    }
+    
+    public void SliderControll()
+    {
+        Firebase.Audio.volume = slider.value;
+    }
+
+
+
 }

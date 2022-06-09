@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 using System;
-
+using System.Xml.Serialization;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using Data;
-
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 
 public class GameController : MonoBehaviour
@@ -47,6 +48,13 @@ public class GameController : MonoBehaviour
     private static int _currnbenemy = 0;
     public static FirebaseManager Firebase;
     public static DateTime start;
+
+    public static bool isEnd = false;
+    
+    public  Text score;
+    public  GameObject endGameUI;
+    public GameObject settings;
+    public  AudioSource victorySound;
     
     [SerializeField] 
     private GameObject EnemyTankModel;
@@ -103,7 +111,7 @@ public class GameController : MonoBehaviour
     {
         Firebase=FirebaseManager.Instance;
         Firebase.Audio.Pause();
-        
+
         //Determine the spawn location depending on the scene
         DetermineSpawnForScene();
 
@@ -161,17 +169,27 @@ public class GameController : MonoBehaviour
             tank1.GetComponent<EnemyTank>().killed = Killed;
             _currnbenemy++;
         }
-    }
 
-    public static void EndGame()
-    {
+        if (isEnd)
+        {
+            isEnd = false;
+            Invoke("EndGame",1);
+        }
+            
         
+    }
+    public void EndGame()
+    {
+        settings.SetActive(false);
         DateTime time = DateTime.Now;
         TimeSpan interval =  time- start;
-        Firebase.xpMiniTank += (int) (interval.TotalMilliseconds)/30;
+        int xp = (int) (interval.TotalMilliseconds) / 30;
+        Firebase.xpMiniTank += xp;
         Firebase.SaveDataButton("MiniTank");
-        PhotonNetwork.LoadLevel(3);
-        
+        //PhotonNetwork.LoadLevel(3);
+        score.text = xp.ToString();
+        endGameUI.SetActive(true);
+        victorySound.Play();
     }
 
     public static void EnemyDestroyed()
