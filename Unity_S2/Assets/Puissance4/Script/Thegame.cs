@@ -489,6 +489,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
             {
                 isplayerturn = Random.Range(0,2) == 1;
                 DifficultyCanvas.gameObject.SetActive(true);
+                Setting.SetActive(false);
                 gamestarted = false;
                 for (int i = 0; i < 7; i++)
                 {
@@ -504,6 +505,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
             //isplayerturn = isplayerturn = Random.Range(0,2) == 1;
             isplayerturn = Random.Range(0,2) == 1;
             DifficultyCanvas.gameObject.SetActive(true);
+            Setting.SetActive(false);
             gamestarted = false;
             for (int i = 0; i < 7; i++)
             {
@@ -1377,6 +1379,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
         DifficultyCanvas.gameObject.SetActive(false);
+        Setting.SetActive(true);
         
         for (int i = 0; i < 7; i++)
         {
@@ -1391,6 +1394,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
         DifficultyCanvas.gameObject.SetActive(false);
+        Setting.SetActive(true);
         
         for (int i = 0; i < 7; i++)
         {
@@ -1405,6 +1409,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
         gamestarted = true;
         TurnIndicator.gameObject.SetActive(true);
         DifficultyCanvas.gameObject.SetActive(false);
+        Setting.SetActive(true);
         
         for (int i = 0; i < 7; i++)
         {
