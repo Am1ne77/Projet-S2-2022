@@ -100,4 +100,9 @@ public class UIManager : MonoBehaviour
         var song = FirebaseManager.Instance.Audio;
         song.volume = son.value;
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }

@@ -24,6 +24,8 @@ public class btn_choose_game : MonoBehaviour
     //Screen object variables
     public void Start()
     {
+        Firebase=FirebaseManager.Instance;
+        
         if (PhotonNetwork.CurrentRoom.PlayerCount > 1)
         {
             hangManButton.gameObject.SetActive(false);
