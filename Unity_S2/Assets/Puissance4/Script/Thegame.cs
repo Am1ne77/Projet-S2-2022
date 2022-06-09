@@ -1431,7 +1431,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
 
     public void PlayAgain()
     {
-        if (PhotonNetwork.CountOfPlayers==1)  SceneManager.LoadScene(2); 
+        if (PhotonNetwork.CountOfPlayers == 2)  PhotonNetwork.LoadLevel(2); 
         EndGameUi.SetActive(false);
         Setting.SetActive(true);
         YouLostUi.SetActive(false);
