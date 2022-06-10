@@ -50,6 +50,9 @@ public class Thegame : MonoBehaviourPun, IPunObservable
     public GameObject YouWonUi;
     public GameObject YouLostUi;
     public GameObject DrawUi;
+    
+    
+    public static DateTime start=DateTime.Now;
 
     public GameObject DisconnectedPlayer;
 
@@ -630,11 +633,14 @@ public class Thegame : MonoBehaviourPun, IPunObservable
         }
         else
         {
-         
+            
+
             if (PhotonNetwork.PlayerList.Length == 1)
             {
-                DisconnectedPlayer.SetActive(true); 
-                PhotonNetwork.LeaveRoom();
+                DisconnectedPlayer.SetActive(true);
+                Debug.Log("room "+PhotonNetwork.InRoom);
+                
+                Debug.Log("connected "+PhotonNetwork.IsConnected);
                 SceneManager.LoadScene(2);
                 return;
 
@@ -658,11 +664,13 @@ public class Thegame : MonoBehaviourPun, IPunObservable
                     {
                         Firebase.xpPuissance4 += 200 * turn;
                         YouWonUi.SetActive(true);
+                        Firebase.SaveDataButton("Puissance4");
                     }
                     else
                     {
                         Firebase.xpPuissance4 -= 100 * turn;
                         YouLostUi.SetActive(true);
+                        Firebase.SaveDataButton("Puissance4");
                     }
                 }
                 else
@@ -677,11 +685,13 @@ public class Thegame : MonoBehaviourPun, IPunObservable
                         {
                             Firebase.xpPuissance4 -= 100 * turn;
                             YouLostUi.SetActive(true);
+                            Firebase.SaveDataButton("Puissance4");
                         }
                         else
                         {
                             Firebase.xpPuissance4 += 200 * turn;
                             YouWonUi.SetActive(true);
+                            Firebase.SaveDataButton("Puissance4");
                         }
                     }
                 }
@@ -777,6 +787,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
         }
         else
         {
+            if ((DateTime.Now-start).Seconds < 3) return;
             //var a = true;
             //if (!Equals(PhotonNetwork.PlayerList[turn % 2],PhotonNetwork.LocalPlayer))
             if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient) || (turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
@@ -800,8 +811,10 @@ public class Thegame : MonoBehaviourPun, IPunObservable
                 p = Player2Piece;
                 r = Pions2;
             }
-
+            
+            
             DropPiece(Board, row, 0, p);
+            start=DateTime.Now;
             var spawn = new Vector3(265, 25, 120);
            
             if (row!= 5)
@@ -813,6 +826,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
             photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
             ToggleButtonsOnline();
+            start = DateTime.Now;
         }
     }
 
@@ -861,6 +875,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
         }
         else
         {
+            if (( DateTime.Now-start).Seconds < 3) return;
             if ((turn % 2 != 0 && PhotonNetwork.IsMasterClient)||(turn % 2 != 1 && (!PhotonNetwork.IsMasterClient)))
             {
                 return;
@@ -897,6 +912,7 @@ public class Thegame : MonoBehaviourPun, IPunObservable
             photonView.RPC("AddTurn",RpcTarget.All);
             notyet = false;
             ToggleButtonsOnline();
+            start=DateTime.Now;
             
         }
     }
@@ -1423,15 +1439,18 @@ public class Thegame : MonoBehaviourPun, IPunObservable
 
     public void Exit()
     {
-        
-        Firebase.SaveDataButton("Puissance4");
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) PhotonNetwork.LoadLevel(3);
-        else SceneManager.LoadScene(1);
     }
 
     public void PlayAgain()
     {
-        if (PhotonNetwork.CountOfPlayers==1)  SceneManager.LoadScene(2); 
+        if (PhotonNetwork.CountOfPlayers==1 && !aienabled)
+        {
+            
+            PhotonNetwork.LoadLevel(2);
+            PhotonNetwork.LeaveRoom();
+            return;
+        }
         EndGameUi.SetActive(false);
         Setting.SetActive(true);
         YouLostUi.SetActive(false);
@@ -1589,9 +1608,10 @@ public class Thegame : MonoBehaviourPun, IPunObservable
 
     public void MainMenu()
     {
-        Firebase.SignOutButton();
-        PhotonNetwork.DestroyAll();
-        SceneManager.LoadScene(1);
+        Firebase.SaveDataButton("puissance4");
+        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LeaveRoom();
+
 
     }
 
