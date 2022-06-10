@@ -66,6 +66,8 @@ namespace Matchmaking
         /// </summary>
         void Start()
         {
+            if (PhotonNetwork.IsConnected)
+                PhotonNetwork.Disconnect();
             // #Critical
             // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
             //this.toggleGroup = GetComponent<ToggleGroup>();
@@ -115,6 +117,7 @@ namespace Matchmaking
         /// </summary>
         public void Connect()
         {
+            
             Toggle toggle = toggleGroup.ActiveToggles().FirstOrDefault();
             if (toggle.GetComponentInChildren<Text>().text == "One Player")
             {
@@ -128,7 +131,6 @@ namespace Matchmaking
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
             {
-
                 // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnJoinRandomFailed() and we'll create one.
                 PhotonNetwork.JoinRandomRoom();
 
@@ -140,7 +142,7 @@ namespace Matchmaking
                 PhotonNetwork.ConnectUsingSettings();
                 PhotonNetwork.GameVersion = gameVersion;
             }
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            /*for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
                 var a = PhotonNetwork.PlayerList[i];
                 for (int j = i + 1; j < PhotonNetwork.PlayerList.Length; j++)
@@ -152,7 +154,7 @@ namespace Matchmaking
                         return;
                     }
 
-            }
+            }*/
 
             progressLabel.SetActive(true);
             controlPanel.SetActive(false);
@@ -171,22 +173,23 @@ namespace Matchmaking
 
 
             Debug.Log("Launcher: OnConnectedToMaster() was called by PUN");
-            if (PhotonNetwork.JoinRandomRoom())
-            {
-                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                {
-                    var a = PhotonNetwork.PlayerList[i];
-                    for (int j = i + 1; j < PhotonNetwork.PlayerList.Length; j++)
-                        if (PhotonNetwork.PlayerList[j].NickName == a.NickName)
-                        {
-                            Debug.Log("same prs");
-                            PhotonNetwork.LeaveRoom();
-                            SceneManager.LoadScene(1);
-                            return;
-                        }
-
-                }
-            }
+            PhotonNetwork.JoinRandomRoom();
+            /* if (PhotonNetwork.JoinRandomRoom())
+             {
+                 for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                 {
+                     var a = PhotonNetwork.PlayerList[i];
+                     for (int j = i + 1; j < PhotonNetwork.PlayerList.Length; j++)
+                         if (PhotonNetwork.PlayerList[j].NickName == a.NickName)
+                         {
+                             Debug.Log("same prs");
+                             PhotonNetwork.LeaveRoom();
+                             SceneManager.LoadScene(1);
+                             return;
+                         }
+ 
+                 }
+             }*/
         }
 
 
@@ -228,11 +231,9 @@ namespace Matchmaking
 
         public void Ondisco()
         {
-            
+            PhotonNetwork.LeaveRoom();
             progressLabel.SetActive(false);
             controlPanel.SetActive(true);
-            PhotonNetwork.DestroyAll();
-            PhotonNetwork.Disconnect();
         }
 
         public void SettingDisco()

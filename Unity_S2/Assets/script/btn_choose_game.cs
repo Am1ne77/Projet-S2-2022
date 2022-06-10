@@ -63,9 +63,10 @@ public class btn_choose_game : MonoBehaviour
     
     public void MainMenu()
     {
-        Firebase.SignOutButton();
-        PhotonNetwork.DestroyAll();
-        SceneManager.LoadScene(1);
+        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LeaveRoom();
+        
+        //PhotonNetwork.Disconnect();
 
     }
     
