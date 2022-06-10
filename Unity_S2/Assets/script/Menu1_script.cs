@@ -62,7 +62,6 @@ public class Menu1_script : MonoBehaviour
     } 
     public void CloseApp()
     {
-        Firebase.SignOutButton();
         Application.Quit();
     }
 

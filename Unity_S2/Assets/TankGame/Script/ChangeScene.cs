@@ -44,9 +44,9 @@ public class ChangeScene : MonoBehaviour
 
     public void MainMenu()
     {
-        Firebase.SignOutButton();
-        PhotonNetwork.DestroyAll();
-        SceneManager.LoadScene(1);
+        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LeaveRoom();
+
 
     }
     
